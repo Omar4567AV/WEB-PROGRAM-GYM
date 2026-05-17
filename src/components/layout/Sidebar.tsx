@@ -86,11 +86,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               `}
             >
               {React.cloneElement(link.icon as React.ReactElement<any>, {
-                className: `w-5 h-5 ${
-                  window.location.pathname === link.to || (link.to !== '/' && window.location.pathname.startsWith(link.to)) 
-                    ? 'text-[var(--primary)]' 
-                    : 'text-gray-400'
-                }`
+                className: 'w-5 h-5',
               })}
               {link.label}
             </NavLink>

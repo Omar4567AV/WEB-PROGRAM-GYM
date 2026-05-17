@@ -5,6 +5,7 @@ import { StatCard, ClientCard } from '../../components/cards';
 import { Users, TrendingUp, Activity, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '../../components/ui';
+import { mockPrograms } from '../../data/mockPrograms';
 
 export const CoachDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -13,7 +14,7 @@ export const CoachDashboard: React.FC = () => {
   if (!user || user.role !== 'coach') return null;
 
   const totalClients = clients.length;
-  const activePrograms = clients.filter(c => c.coachId === user.id).length; // Mock metric
+  const activePrograms = mockPrograms.filter(p => p.isActive && p.coachId === user.id).length;
   
   return (
     <div className="space-y-8">

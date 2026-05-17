@@ -4,6 +4,7 @@ import { CalorieResult } from '../../types/calories.types';
 import { Input, Select, Button, Badge } from '../../components/ui';
 import { Calculator, Utensils, Droplets, Activity } from 'lucide-react';
 import { formatCalories } from '../../utils/formatters';
+import { CaloriesCircle } from './CaloriesCircle';
 
 export const CaloriesCalculator: React.FC = () => {
   const [age, setAge] = useState(25);
@@ -117,15 +118,20 @@ export const CaloriesCalculator: React.FC = () => {
         <div className="lg:col-span-7">
           {result ? (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="card text-center bg-gradient-to-br from-gray-900 to-gray-800 text-white border-0">
-                <Badge variant="primary" className="mb-4 bg-red-500 text-white border-red-400">
+              <div className="card flex flex-col items-center text-center py-8">
+                <Badge variant="primary" className="mb-6">
                   Daily Target
                 </Badge>
-                <h3 className="text-6xl font-bold font-['Oswald'] tracking-tight mb-2">
-                  {formatCalories(getTargetCalories())}
-                </h3>
-                <p className="text-gray-400 font-medium capitalize">
+                <CaloriesCircle
+                  current={getTargetCalories()}
+                  target={result.maintenance}
+                  size={200}
+                />
+                <p className="mt-4 text-gray-500 font-medium capitalize">
                   for {goal.replace('-', ' ')}
+                </p>
+                <p className="text-sm text-gray-400 mt-1">
+                  Maintenance: {formatCalories(result.maintenance)}
                 </p>
               </div>
 

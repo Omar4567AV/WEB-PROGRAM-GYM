@@ -2,7 +2,7 @@ import React from 'react';
 import { useClients } from '../../hooks/useClients';
 import { ClientCard } from '../../components/cards';
 import { Input, Select, Button, Spinner } from '../../components/ui';
-import { Search, Plus } from 'lucide-react';
+import { Search, Plus, Users } from 'lucide-react';
 
 export const CoachClients: React.FC = () => {
   const { 
@@ -75,8 +75,5 @@ export const CoachClients: React.FC = () => {
     </div>
   );
 };
-
-// Import Users icon
-import { Users } from 'lucide-react';
 
 export default CoachClients;

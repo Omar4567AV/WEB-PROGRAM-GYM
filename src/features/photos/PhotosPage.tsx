@@ -6,11 +6,13 @@ import { PhotoCard } from '../../components/cards';
 import { Spinner, Button } from '../../components/ui';
 import { Camera, Plus } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { PhotoUpload } from './PhotoUpload';
 
 export const PhotosPage: React.FC = () => {
   const { user } = useAuth();
   const [photos, setPhotos] = useState<ProgressPhoto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
 
   useEffect(() => {
     if (user?.id) {
@@ -48,7 +50,7 @@ export const PhotosPage: React.FC = () => {
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Progress Photos</h2>
           <p className="text-gray-500 font-medium">A visual timeline of your transformation.</p>
         </div>
-        <Button leftIcon={<Plus className="w-5 h-5" />}>
+        <Button leftIcon={<Plus className="w-5 h-5" />} onClick={() => setIsUploadOpen(true)}>
           Upload Photos
         </Button>
       </div>
@@ -58,7 +60,7 @@ export const PhotosPage: React.FC = () => {
           <Camera className="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <h3 className="text-xl font-bold text-gray-900 mb-2">No Photos Yet</h3>
           <p className="text-gray-500 mb-6">Start documenting your journey by uploading your first progress photo.</p>
-          <Button leftIcon={<Plus className="w-5 h-5" />}>Upload Now</Button>
+          <Button leftIcon={<Plus className="w-5 h-5" />} onClick={() => setIsUploadOpen(true)}>Upload Now</Button>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -70,6 +72,15 @@ export const PhotosPage: React.FC = () => {
             />
           ))}
         </div>
+      )}
+
+      {user?.id && (
+        <PhotoUpload
+          isOpen={isUploadOpen}
+          onClose={() => setIsUploadOpen(false)}
+          clientId={user.id}
+          onSuccess={(photo) => setPhotos((prev) => [photo, ...prev])}
+        />
       )}
     </div>
   );

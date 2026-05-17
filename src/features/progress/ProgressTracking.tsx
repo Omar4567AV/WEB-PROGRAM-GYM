@@ -5,11 +5,13 @@ import { WeeklyEntry } from '../../types/progress.types';
 import { Spinner, Button } from '../../components/ui';
 import { TrendingDown, Calendar, Plus } from 'lucide-react';
 import { formatDate, formatWeight } from '../../utils/formatters';
+import { WeeklyCheckIn } from './WeeklyCheckIn';
 
 export const ProgressTracking: React.FC = () => {
   const { user } = useAuth();
   const [entries, setEntries] = useState<WeeklyEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCheckInOpen, setIsCheckInOpen] = useState(false);
 
   useEffect(() => {
     if (user?.id) {
@@ -29,7 +31,7 @@ export const ProgressTracking: React.FC = () => {
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Progress Tracking</h2>
           <p className="text-gray-500 font-medium">Review your historical data and weekly check-ins.</p>
         </div>
-        <Button leftIcon={<Plus className="w-5 h-5" />}>
+        <Button leftIcon={<Plus className="w-5 h-5" />} onClick={() => setIsCheckInOpen(true)}>
           New Check-in
         </Button>
       </div>
@@ -86,6 +88,15 @@ export const ProgressTracking: React.FC = () => {
           </div>
         )}
       </div>
+
+      {user?.id && (
+        <WeeklyCheckIn
+          isOpen={isCheckInOpen}
+          onClose={() => setIsCheckInOpen(false)}
+          clientId={user.id}
+          onSuccess={(entry) => setEntries((prev) => [entry, ...prev])}
+        />
+      )}
     </div>
   );
 };

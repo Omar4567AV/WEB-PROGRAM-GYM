@@ -10,6 +10,7 @@ import { useWorkout } from '../../hooks/useWorkout';
 import { ProgramCard } from '../../components/cards';
 import { progressService } from '../../services/progressService';
 import { WeeklyEntry } from '../../types/progress.types';
+import { Program, ProgramType } from '../../types/workout.types';
 
 export const CoachClientDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -367,7 +368,7 @@ export const CoachClientDetails: React.FC = () => {
                   </div>
                   <div>
                     <span className="text-gray-500 block text-xs uppercase font-bold tracking-wider">Sleep</span>
-                    <span className="font-medium text-gray-900">{entry.sleepHours} hrs</span>
+                    <span className="font-medium text-gray-900">{entry.sleepQuality}/10</span>
                   </div>
                 </div>
                 {entry.notes && (
@@ -395,18 +396,18 @@ export const CoachClientDetails: React.FC = () => {
             setIsSaving(true);
             try {
               const formData = new FormData(e.currentTarget);
-              const newProgram = {
+              const newProgram: Program = {
                 id: 'prog-' + Date.now(),
                 clientId: id,
-                coachId: client.coachId,
+                coachId: client.coachId ?? '',
                 title: formData.get('title') as string,
                 description: formData.get('description') as string,
-                goal: formData.get('goal') as any,
-                difficulty: formData.get('difficulty') as any,
-                weeks: 4,
-                workouts: [] // empty for now, in a real app coach would build workouts
+                type: formData.get('type') as ProgramType,
+                startDate: new Date().toISOString().split('T')[0],
+                days: [],
+                isActive: true,
               };
-              await updateProgram(newProgram as any);
+              await updateProgram(newProgram);
               setIsProgramModalOpen(false);
             } catch (err) {
               // handled by hook
@@ -426,23 +427,15 @@ export const CoachClientDetails: React.FC = () => {
             />
           </div>
           <Select
-            label="Program Goal"
-            name="goal"
+            label="Program Type"
+            name="type"
             required
             options={[
-              { value: 'fat-loss', label: 'Fat Loss' },
-              { value: 'muscle-gain', label: 'Muscle Gain' },
-              { value: 'maintenance', label: 'Maintenance' },
-            ]}
-          />
-          <Select
-            label="Difficulty"
-            name="difficulty"
-            required
-            options={[
-              { value: 'beginner', label: 'Beginner' },
-              { value: 'intermediate', label: 'Intermediate' },
-              { value: 'advanced', label: 'Advanced' },
+              { value: 'Full Body', label: 'Full Body' },
+              { value: 'Push Pull Legs', label: 'Push Pull Legs' },
+              { value: 'Upper Lower', label: 'Upper Lower' },
+              { value: 'Fat Loss', label: 'Fat Loss' },
+              { value: 'Muscle Gain', label: 'Muscle Gain' },
             ]}
           />
           

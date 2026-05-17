@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
 import { Dumbbell, ArrowRight, ShieldCheck, Zap, Users } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
@@ -85,8 +86,5 @@ export const HomePage: React.FC = () => {
     </div>
   );
 };
-
-// Import Badge since it's used
-import { Badge } from '../../components/ui/Badge';
 
 export default HomePage;

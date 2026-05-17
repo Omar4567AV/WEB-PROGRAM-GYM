@@ -117,5 +117,36 @@ autoprefixer     → make CSS work better on browsers
 
 npx tailwindcss init -p → create Tailwind config files
 
+## Debug Summary
 
+A debug and cleanup pass was completed for the `coach-platform` project.
+
+The project is a React + TypeScript + Vite fitness coaching SPA with coach and client dashboards, workout programs, calorie calculator, weekly check-ins, and photo tracking.
+
+### Fixed Issues
+
+- Fixed the Assign Program modal type mismatch in `CoachClientDetails.tsx`.
+- Removed the unsafe `as any` cast.
+- Fixed the Active Programs statistic in `CoachDashboard.tsx`.
+- Implemented the Weekly Check-In form.
+- Connected the Weekly Check-In form to `ProgressTracking.tsx`.
+- Implemented the Photo Upload form.
+- Connected the Photo Upload form to `PhotosPage.tsx`.
+- Integrated the unused `CaloriesCircle` component into the calorie calculator.
+- Removed unused Vite scaffold files:
+  - `src/App.tsx`
+  - `src/App.css`
+  - `src/index.css`
+- Removed unused source files:
+  - `src/components/forms/FormField.tsx`
+  - `src/utils/levelCalculator.ts`
+- Fixed Sidebar icon color behavior during SPA navigation.
+- Removed duplicate authentication guards from `DashboardLayout.tsx`.
+
+### Build Result
+
+The project was tested after the fixes using:
+
+```bash
+npm run build
 
