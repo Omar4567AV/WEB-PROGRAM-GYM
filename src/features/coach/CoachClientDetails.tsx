@@ -2,20 +2,40 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { clientService } from '../../services/clientService';
 import { ClientProfile } from '../../types/user.types';
-import { Badge, Button, Spinner } from '../../components/ui';
-import { ArrowLeft, User, Activity, Target, Calendar, MessageSquare, Dumbbell } from 'lucide-react';
+import { Badge, Button, Spinner, Modal, Input, Select } from '../../components/ui';
+import { ArrowLeft, User, Activity, Target, Calendar, MessageSquare, Dumbbell, Edit2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import { formatDate } from '../../utils/formatters';
+import { useWorkout } from '../../hooks/useWorkout';
+import { ProgramCard } from '../../components/cards';
+import { progressService } from '../../services/progressService';
+import { WeeklyEntry } from '../../types/progress.types';
 
 export const CoachClientDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [client, setClient] = useState<ClientProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const { program } = useWorkout(id);
+  const [latestProgress, setLatestProgress] = useState<WeeklyEntry | null>(null);
+  const [allProgress, setAllProgress] = useState<WeeklyEntry[]>([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isProgressModalOpen, setIsProgressModalOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [editFormData, setEditFormData] = useState<Partial<ClientProfile>>({});
+
   useEffect(() => {
     if (id) {
       setIsLoading(true);
-      clientService.getClientById(id)
-        .then(setClient)
+      Promise.all([
+        clientService.getClientById(id),
+        progressService.getProgressByClientId(id)
+      ])
+        .then(([clientData, progressData]) => {
+          setClient(clientData);
+          setAllProgress(progressData);
+          setLatestProgress(progressData.length > 0 ? progressData[0] : null);
+        })
         .catch(console.error)
         .finally(() => setIsLoading(false));
     }
@@ -26,16 +46,32 @@ export const CoachClientDetails: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center gap-4">
-        <Link to="/coach/clients">
-          <Button variant="ghost" size="sm" className="p-2">
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-        </Link>
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900">{client.name}'s Profile</h2>
-          <p className="text-gray-500 font-medium">Manage this client's programs and progress.</p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <Link to="/coach/clients">
+            <Button variant="ghost" size="sm" className="p-2">
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+          </Link>
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900">{client.name}'s Profile</h2>
+            <p className="text-gray-500 font-medium">Manage this client's programs and progress.</p>
+          </div>
         </div>
+        <Button 
+          variant="outline" 
+          leftIcon={<Edit2 className="w-4 h-4" />}
+          onClick={() => {
+            setEditFormData({
+              goal: client.goal,
+              trainingLevel: client.trainingLevel,
+              weight: client.weight,
+            });
+            setIsEditModalOpen(true);
+          }}
+        >
+          Edit Client
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -86,12 +122,15 @@ export const CoachClientDetails: React.FC = () => {
               <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                 <Dumbbell className="w-5 h-5 text-[var(--primary)]" /> Current Program
               </h3>
-              <Button size="sm" variant="outline">Assign New</Button>
+              <Button size="sm" variant="outline" onClick={() => toast.success('Program Assignment coming soon!')}>Assign New</Button>
             </div>
-            
-            <div className="text-center py-8 bg-gray-50 rounded-xl border border-gray-100">
-              <p className="text-gray-500 font-medium">Program feature integration coming next.</p>
-            </div>
+            {program ? (
+              <ProgramCard program={program} />
+            ) : (
+              <div className="text-center py-8 bg-gray-50 rounded-xl border border-gray-100">
+                <p className="text-gray-500 font-medium">No active program assigned yet.</p>
+              </div>
+            )}
           </div>
 
           <div className="card">
@@ -99,15 +138,145 @@ export const CoachClientDetails: React.FC = () => {
               <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                 <Activity className="w-5 h-5 text-[var(--primary)]" /> Recent Progress
               </h3>
-              <Button size="sm" variant="outline">View All</Button>
+              <Button size="sm" variant="outline" onClick={() => setIsProgressModalOpen(true)}>View All</Button>
             </div>
-            
-            <div className="text-center py-8 bg-gray-50 rounded-xl border border-gray-100">
-              <p className="text-gray-500 font-medium">Progress tracking feature integration coming next.</p>
-            </div>
+            {latestProgress ? (
+              <div className="space-y-4">
+                <div className="pb-4 border-b border-gray-100">
+                  <p className="text-sm text-gray-500 mb-1">Latest Check-in</p>
+                  <p className="font-bold">{formatDate(latestProgress.date)}</p>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Weight</p>
+                    <p className="font-bold text-gray-900">{latestProgress.measurements.weight} kg</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Mood</p>
+                    <p className="font-bold text-gray-900 capitalize">{latestProgress.mood}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Energy</p>
+                    <p className="font-bold text-gray-900">{latestProgress.energyLevel}/10</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8 bg-gray-50 rounded-xl border border-gray-100">
+                <p className="text-gray-500 font-medium">No progress entries submitted yet.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
+
+      <Modal 
+        isOpen={isEditModalOpen} 
+        onClose={() => !isSaving && setIsEditModalOpen(false)}
+        title="Edit Client Details"
+      >
+        <form 
+          className="space-y-4"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            if (!id) return;
+            setIsSaving(true);
+            try {
+              const updated = await clientService.updateProfile(id, editFormData);
+              setClient(updated);
+              toast.success('Client updated successfully');
+              setIsEditModalOpen(false);
+            } catch (err) {
+              toast.error('Failed to update client');
+            } finally {
+              setIsSaving(false);
+            }
+          }}
+        >
+          <Select
+            label="Goal"
+            value={editFormData.goal || ''}
+            onChange={(e) => setEditFormData({ ...editFormData, goal: e.target.value as any })}
+            options={[
+              { value: 'fat-loss', label: 'Fat Loss' },
+              { value: 'muscle-gain', label: 'Muscle Gain' },
+              { value: 'maintenance', label: 'Maintenance' },
+            ]}
+          />
+          <Select
+            label="Training Level"
+            value={editFormData.trainingLevel || ''}
+            onChange={(e) => setEditFormData({ ...editFormData, trainingLevel: e.target.value as any })}
+            options={[
+              { value: 'beginner', label: 'Beginner' },
+              { value: 'intermediate', label: 'Intermediate' },
+              { value: 'advanced', label: 'Advanced' },
+            ]}
+          />
+          <Input
+            label="Weight (kg)"
+            type="number"
+            value={editFormData.weight || ''}
+            onChange={(e) => setEditFormData({ ...editFormData, weight: Number(e.target.value) })}
+          />
+          
+          <div className="pt-4 flex gap-3">
+            <Button 
+              type="button" 
+              variant="outline" 
+              fullWidth 
+              onClick={() => setIsEditModalOpen(false)}
+              disabled={isSaving}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" fullWidth isLoading={isSaving}>
+              Save Changes
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Progress History Modal */}
+      <Modal 
+        isOpen={isProgressModalOpen} 
+        onClose={() => setIsProgressModalOpen(false)}
+        title="Full Progress History"
+      >
+        <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+          {allProgress.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">No check-in history found.</div>
+          ) : (
+            allProgress.map((entry) => (
+              <div key={entry.id} className="p-4 border border-gray-100 rounded-xl bg-gray-50">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="font-bold text-gray-900">{formatDate(entry.date)}</span>
+                  <Badge variant="primary" className="capitalize">{entry.mood}</Badge>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-sm">
+                  <div>
+                    <span className="text-gray-500 block text-xs uppercase font-bold tracking-wider">Weight</span>
+                    <span className="font-medium text-gray-900">{entry.measurements.weight} kg</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500 block text-xs uppercase font-bold tracking-wider">Energy</span>
+                    <span className="font-medium text-gray-900">{entry.energyLevel}/10</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500 block text-xs uppercase font-bold tracking-wider">Sleep</span>
+                    <span className="font-medium text-gray-900">{entry.sleepHours} hrs</span>
+                  </div>
+                </div>
+                {entry.notes && (
+                  <p className="mt-3 text-sm text-gray-600 bg-white p-3 rounded-lg border border-gray-100">
+                    "{entry.notes}"
+                  </p>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      </Modal>
     </div>
   );
 };
