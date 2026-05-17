@@ -22,8 +22,15 @@ export const CoachClientDetails: React.FC = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isProgressModalOpen, setIsProgressModalOpen] = useState(false);
   const [isProgramModalOpen, setIsProgramModalOpen] = useState(false);
+  const [isDietModalOpen, setIsDietModalOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [editFormData, setEditFormData] = useState<Partial<ClientProfile>>({});
+  const [dietFormData, setDietFormData] = useState<{
+    targetCalories?: number;
+    targetProtein?: number;
+    targetCarbs?: number;
+    targetFats?: number;
+  }>({});
 
   useEffect(() => {
     if (id) {
@@ -67,6 +74,10 @@ export const CoachClientDetails: React.FC = () => {
               goal: client.goal,
               trainingLevel: client.trainingLevel,
               weight: client.weight,
+              height: client.height,
+              age: client.age,
+              gender: client.gender,
+              activityLevel: client.activityLevel,
             });
             setIsEditModalOpen(true);
           }}
@@ -144,6 +155,53 @@ export const CoachClientDetails: React.FC = () => {
           <div className="card">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Target className="w-5 h-5 text-[var(--primary)]" /> Custom Diet Targets
+              </h3>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                onClick={() => {
+                  setDietFormData({
+                    targetCalories: client.targetCalories,
+                    targetProtein: client.targetProtein,
+                    targetCarbs: client.targetCarbs,
+                    targetFats: client.targetFats,
+                  });
+                  setIsDietModalOpen(true);
+                }}
+              >
+                Edit Diet
+              </Button>
+            </div>
+            {client.targetCalories ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-gray-50 p-4 rounded-xl text-center">
+                  <span className="text-gray-500 block text-xs uppercase font-bold tracking-wider mb-1">Calories</span>
+                  <span className="font-bold text-2xl text-gray-900">{client.targetCalories}</span>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-xl text-center">
+                  <span className="text-gray-500 block text-xs uppercase font-bold tracking-wider mb-1">Protein</span>
+                  <span className="font-bold text-2xl text-[var(--primary)]">{client.targetProtein}g</span>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-xl text-center">
+                  <span className="text-gray-500 block text-xs uppercase font-bold tracking-wider mb-1">Carbs</span>
+                  <span className="font-bold text-2xl text-blue-500">{client.targetCarbs}g</span>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-xl text-center">
+                  <span className="text-gray-500 block text-xs uppercase font-bold tracking-wider mb-1">Fats</span>
+                  <span className="font-bold text-2xl text-yellow-500">{client.targetFats}g</span>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8 bg-gray-50 rounded-xl border border-gray-100">
+                <p className="text-gray-500 font-medium">No custom diet targets assigned.</p>
+              </div>
+            )}
+          </div>
+
+          <div className="card">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                 <Activity className="w-5 h-5 text-[var(--primary)]" /> Recent Progress
               </h3>
               <Button size="sm" variant="outline" onClick={() => setIsProgressModalOpen(true)}>View All</Button>
@@ -201,6 +259,37 @@ export const CoachClientDetails: React.FC = () => {
             }
           }}
         >
+          <div className="grid grid-cols-2 gap-4">
+            <Select
+              label="Gender"
+              value={editFormData.gender || ''}
+              onChange={(e) => setEditFormData({ ...editFormData, gender: e.target.value as any })}
+              options={[
+                { value: 'male', label: 'Male' },
+                { value: 'female', label: 'Female' },
+              ]}
+            />
+            <Input
+              label="Age"
+              type="number"
+              value={editFormData.age || ''}
+              onChange={(e) => setEditFormData({ ...editFormData, age: Number(e.target.value) })}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="Weight (kg)"
+              type="number"
+              value={editFormData.weight || ''}
+              onChange={(e) => setEditFormData({ ...editFormData, weight: Number(e.target.value) })}
+            />
+            <Input
+              label="Height (cm)"
+              type="number"
+              value={editFormData.height || ''}
+              onChange={(e) => setEditFormData({ ...editFormData, height: Number(e.target.value) })}
+            />
+          </div>
           <Select
             label="Goal"
             value={editFormData.goal || ''}
@@ -212,6 +301,18 @@ export const CoachClientDetails: React.FC = () => {
             ]}
           />
           <Select
+            label="Activity Level"
+            value={editFormData.activityLevel || ''}
+            onChange={(e) => setEditFormData({ ...editFormData, activityLevel: e.target.value as any })}
+            options={[
+              { value: 'sedentary', label: 'Sedentary' },
+              { value: 'light', label: 'Lightly Active' },
+              { value: 'moderate', label: 'Moderately Active' },
+              { value: 'active', label: 'Very Active' },
+              { value: 'very-active', label: 'Extra Active' },
+            ]}
+          />
+          <Select
             label="Training Level"
             value={editFormData.trainingLevel || ''}
             onChange={(e) => setEditFormData({ ...editFormData, trainingLevel: e.target.value as any })}
@@ -220,12 +321,6 @@ export const CoachClientDetails: React.FC = () => {
               { value: 'intermediate', label: 'Intermediate' },
               { value: 'advanced', label: 'Advanced' },
             ]}
-          />
-          <Input
-            label="Weight (kg)"
-            type="number"
-            value={editFormData.weight || ''}
-            onChange={(e) => setEditFormData({ ...editFormData, weight: Number(e.target.value) })}
           />
           
           <div className="pt-4 flex gap-3">
@@ -363,6 +458,81 @@ export const CoachClientDetails: React.FC = () => {
             </Button>
             <Button type="submit" fullWidth isLoading={isSaving}>
               Create & Assign
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Edit Diet Modal */}
+      <Modal 
+        isOpen={isDietModalOpen} 
+        onClose={() => !isSaving && setIsDietModalOpen(false)}
+        title="Custom Diet Targets"
+      >
+        <form 
+          className="space-y-4"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            if (!id) return;
+            setIsSaving(true);
+            try {
+              const updated = await clientService.updateProfile(id, { ...client, ...dietFormData });
+              setClient(updated);
+              toast.success('Diet targets updated successfully');
+              setIsDietModalOpen(false);
+            } catch (err) {
+              toast.error('Failed to update diet');
+            } finally {
+              setIsSaving(false);
+            }
+          }}
+        >
+          <div className="p-4 bg-red-50 text-red-800 rounded-lg text-sm mb-4">
+            Setting custom values here overrides the automatic calculator for this client.
+          </div>
+          <Input
+            label="Daily Calories (kcal)"
+            type="number"
+            required
+            value={dietFormData.targetCalories || ''}
+            onChange={(e) => setDietFormData({ ...dietFormData, targetCalories: Number(e.target.value) })}
+          />
+          <div className="grid grid-cols-3 gap-4">
+            <Input
+              label="Protein (g)"
+              type="number"
+              required
+              value={dietFormData.targetProtein || ''}
+              onChange={(e) => setDietFormData({ ...dietFormData, targetProtein: Number(e.target.value) })}
+            />
+            <Input
+              label="Carbs (g)"
+              type="number"
+              required
+              value={dietFormData.targetCarbs || ''}
+              onChange={(e) => setDietFormData({ ...dietFormData, targetCarbs: Number(e.target.value) })}
+            />
+            <Input
+              label="Fats (g)"
+              type="number"
+              required
+              value={dietFormData.targetFats || ''}
+              onChange={(e) => setDietFormData({ ...dietFormData, targetFats: Number(e.target.value) })}
+            />
+          </div>
+          
+          <div className="pt-4 flex gap-3">
+            <Button 
+              type="button" 
+              variant="outline" 
+              fullWidth 
+              onClick={() => setIsDietModalOpen(false)}
+              disabled={isSaving}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" fullWidth isLoading={isSaving}>
+              Save Targets
             </Button>
           </div>
         </form>

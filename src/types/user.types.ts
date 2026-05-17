@@ -28,6 +28,11 @@ export interface ClientProfile extends User {
   activityLevel: 'sedentary' | 'light' | 'moderate' | 'active' | 'very-active';
   trainingLevel: 'beginner' | 'intermediate' | 'advanced';
   coachId?: string;
+  // Custom coach overrides for diet
+  targetCalories?: number;
+  targetProtein?: number;
+  targetCarbs?: number;
+  targetFats?: number;
 }
 
 /**
