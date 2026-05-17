@@ -48,7 +48,7 @@ export const ClientDashboard: React.FC = () => {
         />
         <StatCard
           title="Goal"
-          value={<span className="capitalize">{user.goal?.replace('-', ' ') || 'Not Set'}</span>}
+          value={<span className="capitalize">{(user as any).goal?.replace('-', ' ') || 'Not Set'}</span>}
           icon={<Target className="w-6 h-6" />}
           subtitle="Current focus"
         />
