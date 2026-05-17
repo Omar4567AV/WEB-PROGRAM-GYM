@@ -23,6 +23,7 @@ import SettingsPage from '../features/client/SettingsPage';
 import CoachDashboard from '../features/coach/CoachDashboard';
 import CoachClients from '../features/coach/CoachClients';
 import CoachClientDetails from '../features/coach/CoachClientDetails';
+import ProgramEditor from '../features/workout/ProgramEditor';
 
 // Other Features
 import CaloriesCalculator from '../features/calories/CaloriesCalculator';
@@ -72,6 +73,10 @@ export const router = createBrowserRouter([
               {
                 path: '/coach/clients/:id',
                 element: <CoachClientDetails />,
+              },
+              {
+                path: '/coach/clients/:id/program',
+                element: <ProgramEditor />,
               },
             ],
           },

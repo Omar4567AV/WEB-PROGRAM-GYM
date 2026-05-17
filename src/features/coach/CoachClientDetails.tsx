@@ -16,11 +16,12 @@ export const CoachClientDetails: React.FC = () => {
   const [client, setClient] = useState<ClientProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { program } = useWorkout(id);
+  const { program, updateProgram } = useWorkout(id);
   const [latestProgress, setLatestProgress] = useState<WeeklyEntry | null>(null);
   const [allProgress, setAllProgress] = useState<WeeklyEntry[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isProgressModalOpen, setIsProgressModalOpen] = useState(false);
+  const [isProgramModalOpen, setIsProgramModalOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [editFormData, setEditFormData] = useState<Partial<ClientProfile>>({});
 
@@ -122,7 +123,14 @@ export const CoachClientDetails: React.FC = () => {
               <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                 <Dumbbell className="w-5 h-5 text-[var(--primary)]" /> Current Program
               </h3>
-              <Button size="sm" variant="outline" onClick={() => toast.success('Program Assignment coming soon!')}>Assign New</Button>
+              <div className="flex gap-2">
+                {program && (
+                  <Link to={`/coach/clients/${id}/program`}>
+                    <Button size="sm">Edit Exercises</Button>
+                  </Link>
+                )}
+                <Button size="sm" variant="outline" onClick={() => setIsProgramModalOpen(true)}>Assign New</Button>
+              </div>
             </div>
             {program ? (
               <ProgramCard program={program} />
@@ -276,6 +284,88 @@ export const CoachClientDetails: React.FC = () => {
             ))
           )}
         </div>
+      </Modal>
+
+      {/* Assign Program Modal */}
+      <Modal 
+        isOpen={isProgramModalOpen} 
+        onClose={() => !isSaving && setIsProgramModalOpen(false)}
+        title="Assign New Program"
+      >
+        <form 
+          className="space-y-4"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            if (!id || !client) return;
+            setIsSaving(true);
+            try {
+              const formData = new FormData(e.currentTarget);
+              const newProgram = {
+                id: 'prog-' + Date.now(),
+                clientId: id,
+                coachId: client.coachId,
+                title: formData.get('title') as string,
+                description: formData.get('description') as string,
+                goal: formData.get('goal') as any,
+                difficulty: formData.get('difficulty') as any,
+                weeks: 4,
+                workouts: [] // empty for now, in a real app coach would build workouts
+              };
+              await updateProgram(newProgram as any);
+              setIsProgramModalOpen(false);
+            } catch (err) {
+              // handled by hook
+            } finally {
+              setIsSaving(false);
+            }
+          }}
+        >
+          <Input label="Program Title" name="title" required placeholder="e.g. 12-Week Shred" />
+          <div className="space-y-1.5">
+            <label className="text-sm font-bold uppercase tracking-wide text-gray-700">Description</label>
+            <textarea 
+              name="description" 
+              required
+              className="w-full bg-white border-2 border-gray-200 rounded-lg px-4 py-2.5 outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-red-500/10 transition-all duration-200 min-h-[100px]"
+              placeholder="Program overview..."
+            />
+          </div>
+          <Select
+            label="Program Goal"
+            name="goal"
+            required
+            options={[
+              { value: 'fat-loss', label: 'Fat Loss' },
+              { value: 'muscle-gain', label: 'Muscle Gain' },
+              { value: 'maintenance', label: 'Maintenance' },
+            ]}
+          />
+          <Select
+            label="Difficulty"
+            name="difficulty"
+            required
+            options={[
+              { value: 'beginner', label: 'Beginner' },
+              { value: 'intermediate', label: 'Intermediate' },
+              { value: 'advanced', label: 'Advanced' },
+            ]}
+          />
+          
+          <div className="pt-4 flex gap-3">
+            <Button 
+              type="button" 
+              variant="outline" 
+              fullWidth 
+              onClick={() => setIsProgramModalOpen(false)}
+              disabled={isSaving}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" fullWidth isLoading={isSaving}>
+              Create & Assign
+            </Button>
+          </div>
+        </form>
       </Modal>
     </div>
   );
