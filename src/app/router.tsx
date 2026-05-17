@@ -8,11 +8,27 @@ import DashboardLayout from '../components/layout/DashboardLayout';
 import ProtectedRoute from '../features/auth/ProtectedRoute';
 import RoleRoute from '../features/auth/RoleRoute';
 
-// Features (We will create these next)
+// Auth Features
 import HomePage from '../features/auth/HomePage';
 import LoginPage from '../features/auth/LoginPage';
 import RegisterPage from '../features/auth/RegisterPage';
 import NotFoundPage from '../features/auth/NotFoundPage';
+
+// Client Features
+import ClientDashboard from '../features/client/ClientDashboard';
+import ClientProfile from '../features/client/ClientProfile';
+import SettingsPage from '../features/client/SettingsPage';
+
+// Coach Features
+import CoachDashboard from '../features/coach/CoachDashboard';
+import CoachClients from '../features/coach/CoachClients';
+import CoachClientDetails from '../features/coach/CoachClientDetails';
+
+// Other Features
+import CaloriesCalculator from '../features/calories/CaloriesCalculator';
+import WorkoutProgram from '../features/workout/WorkoutProgram';
+import ProgressTracking from '../features/progress/ProgressTracking';
+import PhotosPage from '../features/photos/PhotosPage';
 
 export const router = createBrowserRouter([
   // Public Routes
@@ -47,18 +63,15 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: '/coach',
-                // element: <CoachDashboard />,
-                element: <div>Coach Dashboard (Coming Soon)</div>,
+                element: <CoachDashboard />,
               },
               {
                 path: '/coach/clients',
-                // element: <CoachClients />,
-                element: <div>Coach Clients (Coming Soon)</div>,
+                element: <CoachClients />,
               },
               {
                 path: '/coach/clients/:id',
-                // element: <CoachClientDetails />,
-                element: <div>Client Details (Coming Soon)</div>,
+                element: <CoachClientDetails />,
               },
             ],
           },
@@ -69,33 +82,27 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: '/client',
-                // element: <ClientDashboard />,
-                element: <div>Client Dashboard (Coming Soon)</div>,
+                element: <ClientDashboard />,
               },
               {
                 path: '/client/profile',
-                // element: <ClientProfile />,
-                element: <div>Client Profile (Coming Soon)</div>,
+                element: <ClientProfile />,
               },
               {
                 path: '/client/workout',
-                // element: <WorkoutProgram />,
-                element: <div>Workout Program (Coming Soon)</div>,
+                element: <WorkoutProgram />,
               },
               {
                 path: '/client/calories',
-                // element: <CaloriesCalculator />,
-                element: <div>Calories Calculator (Coming Soon)</div>,
+                element: <CaloriesCalculator />,
               },
               {
                 path: '/client/progress',
-                // element: <ProgressTracking />,
-                element: <div>Progress Tracking (Coming Soon)</div>,
+                element: <ProgressTracking />,
               },
               {
                 path: '/client/photos',
-                // element: <PhotosPage />,
-                element: <div>Photos Page (Coming Soon)</div>,
+                element: <PhotosPage />,
               },
             ],
           },
@@ -103,8 +110,7 @@ export const router = createBrowserRouter([
           // Shared Protected Routes
           {
             path: '/settings',
-            // element: <SettingsPage />,
-            element: <div>Settings Page (Coming Soon)</div>,
+            element: <SettingsPage />,
           },
         ],
       },
