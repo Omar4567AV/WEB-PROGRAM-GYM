@@ -16,14 +16,14 @@ export const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(email, password);
+      const loggedInUser = await login(email, password);
       // We rely on RoleRoute to properly route the user, 
       // but if there's a specific 'from' route, we go there.
       if (from !== '/') {
         navigate(from, { replace: true });
       } else {
-        // Just go to root, RoleRoute handles the dashboard redirect
-        navigate('/', { replace: true });
+        // Just go to their specific dashboard
+        navigate(loggedInUser.role === 'coach' ? '/coach' : '/client', { replace: true });
       }
     } catch (error) {
       // Error is handled by the auth context toast

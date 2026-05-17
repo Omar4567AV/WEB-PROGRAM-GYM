@@ -11,7 +11,7 @@ interface AuthContextType {
   role: UserRole | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   logout: () => void;
 }
 
@@ -36,12 +36,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsLoading(false);
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<User> => {
     try {
       setIsLoading(true);
       const { user: loggedInUser } = await authService.login(email, password);
       setUser(loggedInUser);
       toast.success(`Welcome back, ${loggedInUser.name}!`);
+      return loggedInUser;
     } catch (error: any) {
       toast.error(error.message || 'Login failed');
       throw error;
