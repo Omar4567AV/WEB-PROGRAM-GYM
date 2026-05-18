@@ -127,7 +127,7 @@ export const CoachClientDetails: React.FC = () => {
             </div>
             <h3 className="text-xl font-bold text-gray-900">{client.name}</h3>
             <p className="text-gray-500 mb-4">{client.email}</p>
-            
+
             <div className="w-full flex gap-2">
               <Button fullWidth leftIcon={<MessageSquare className="w-4 h-4" />}>
                 Message
@@ -137,7 +137,7 @@ export const CoachClientDetails: React.FC = () => {
 
           <div className="card space-y-4">
             <h4 className="font-bold text-gray-900 border-b border-gray-100 pb-2">Client Details</h4>
-            
+
             <div className="flex justify-between items-center text-sm">
               <span className="text-gray-500">Goal</span>
               <Badge variant="primary" className="capitalize">{client.goal.replace('-', ' ')}</Badge>
@@ -183,9 +183,9 @@ export const CoachClientDetails: React.FC = () => {
               <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                 <Target className="w-5 h-5 text-[var(--primary)]" /> Custom Diet Targets
               </h3>
-              <Button 
-                size="sm" 
-                variant="outline" 
+              <Button
+                size="sm"
+                variant="outline"
                 onClick={() => {
                   setDietFormData({
                     targetCalories: client.targetCalories,
@@ -262,12 +262,12 @@ export const CoachClientDetails: React.FC = () => {
         </div>
       </div>
 
-      <Modal 
-        isOpen={isEditModalOpen} 
+      <Modal
+        isOpen={isEditModalOpen}
         onClose={() => !isSaving && setIsEditModalOpen(false)}
         title="Edit Client Details"
       >
-        <form 
+        <form
           className="space-y-4"
           onSubmit={async (e) => {
             e.preventDefault();
@@ -348,12 +348,12 @@ export const CoachClientDetails: React.FC = () => {
               { value: 'advanced', label: 'Advanced' },
             ]}
           />
-          
+
           <div className="pt-4 flex gap-3">
-            <Button 
-              type="button" 
-              variant="outline" 
-              fullWidth 
+            <Button
+              type="button"
+              variant="outline"
+              fullWidth
               onClick={() => setIsEditModalOpen(false)}
               disabled={isSaving}
             >
@@ -367,8 +367,8 @@ export const CoachClientDetails: React.FC = () => {
       </Modal>
 
       {/* Progress History Modal */}
-      <Modal 
-        isOpen={isProgressModalOpen} 
+      <Modal
+        isOpen={isProgressModalOpen}
         onClose={() => setIsProgressModalOpen(false)}
         title="Full Progress History"
       >
@@ -397,7 +397,7 @@ export const CoachClientDetails: React.FC = () => {
                   </div>
                 </div>
                 {entry.notes && (
-                  <p className="mt-3 text-sm text-gray-600 bg-white dark:bg-gray-50 p-3 rounded-lg border border-gray-100">
+                  <p className="mt-3 text-sm text-gray-600 bg-white p-3 rounded-lg border border-gray-100">
                     "{entry.notes}"
                   </p>
                 )}
@@ -408,12 +408,12 @@ export const CoachClientDetails: React.FC = () => {
       </Modal>
 
       {/* Assign Program Modal */}
-      <Modal 
-        isOpen={isProgramModalOpen} 
+      <Modal
+        isOpen={isProgramModalOpen}
         onClose={() => !isSaving && setIsProgramModalOpen(false)}
         title="Assign New Program"
       >
-        <form 
+        <form
           className="space-y-4"
           onSubmit={async (e) => {
             e.preventDefault();
@@ -444,10 +444,10 @@ export const CoachClientDetails: React.FC = () => {
           <Input label="Program Title" name="title" required placeholder="e.g. 12-Week Shred" />
           <div className="space-y-1.5">
             <label className="text-sm font-bold uppercase tracking-wide text-gray-700">Description</label>
-            <textarea 
-              name="description" 
+            <textarea
+              name="description"
               required
-              className="w-full bg-white dark:bg-gray-100 border-2 border-gray-200 rounded-lg px-4 py-2.5 outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-red-500/10 transition-all duration-200 min-h-[100px]"
+              className="w-full bg-white border-2 border-gray-200 rounded-lg px-4 py-2.5 outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-red-500/10 transition-all duration-200 min-h-[100px]"
               placeholder="Program overview..."
             />
           </div>
@@ -463,12 +463,12 @@ export const CoachClientDetails: React.FC = () => {
               { value: 'Muscle Gain', label: 'Muscle Gain' },
             ]}
           />
-          
+
           <div className="pt-4 flex gap-3">
-            <Button 
-              type="button" 
-              variant="outline" 
-              fullWidth 
+            <Button
+              type="button"
+              variant="outline"
+              fullWidth
               onClick={() => setIsProgramModalOpen(false)}
               disabled={isSaving}
             >
@@ -482,12 +482,12 @@ export const CoachClientDetails: React.FC = () => {
       </Modal>
 
       {/* Edit Diet Modal */}
-      <Modal 
-        isOpen={isDietModalOpen} 
+      <Modal
+        isOpen={isDietModalOpen}
         onClose={() => !isSaving && setIsDietModalOpen(false)}
         title="Custom Diet Targets"
       >
-        <form 
+        <form
           className="space-y-4"
           onSubmit={async (e) => {
             e.preventDefault();
@@ -505,7 +505,7 @@ export const CoachClientDetails: React.FC = () => {
             }
           }}
         >
-          <div className="p-4 bg-red-50 dark:bg-red-950/20 text-red-800 dark:text-red-400 rounded-lg text-sm mb-4">
+          <div className="p-4 bg-red-50 text-red-800 rounded-lg text-sm mb-4">
             Setting custom values here overrides the automatic calculator for this client.
           </div>
           <Input
@@ -538,12 +538,12 @@ export const CoachClientDetails: React.FC = () => {
               onChange={(e) => setDietFormData({ ...dietFormData, targetFats: Number(e.target.value) })}
             />
           </div>
-          
+
           <div className="pt-4 flex gap-3">
-            <Button 
-              type="button" 
-              variant="outline" 
-              fullWidth 
+            <Button
+              type="button"
+              variant="outline"
+              fullWidth
               onClick={() => setIsDietModalOpen(false)}
               disabled={isSaving}
             >

@@ -134,7 +134,7 @@ export const WeeklyCheckIn: React.FC<WeeklyCheckInProps> = ({
             Notes (optional)
           </label>
           <textarea
-            className="w-full bg-white dark:bg-gray-100 border-2 border-gray-200 rounded-lg px-4 py-2.5 outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-red-500/10 transition-all duration-200 min-h-[80px] resize-none"
+            className="w-full bg-white border-2 border-gray-200 rounded-lg px-4 py-2.5 outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-red-500/10 transition-all duration-200 min-h-[80px] resize-none"
             placeholder="How did your week go?"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
