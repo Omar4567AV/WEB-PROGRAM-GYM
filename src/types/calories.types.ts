@@ -30,19 +30,23 @@ export interface MacroTargets extends Macros {
   calories: number;
 }
 
+export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack';
+
 /**
  * Daily meal tracking entry
  */
 export interface MealEntry {
   id: string;
   clientId: string;
-  date: string;
+  date: string; // YYYY-MM-DD
+  mealType: MealType;
   name: string;
   calories: number;
   protein: number;
   carbs: number;
   fats: number;
-  mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack';
+  photoUrl?: string;
+  notes?: string;
 }
 
 export default CalorieResult;

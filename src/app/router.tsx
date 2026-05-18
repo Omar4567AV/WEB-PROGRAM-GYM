@@ -27,6 +27,7 @@ import ProgramEditor from '../features/workout/ProgramEditor';
 
 // Other Features
 import CaloriesCalculator from '../features/calories/CaloriesCalculator';
+import NutritionPage from '../features/nutrition/NutritionPage';
 import WorkoutProgram from '../features/workout/WorkoutProgram';
 import ProgressTracking from '../features/progress/ProgressTracking';
 import PhotosPage from '../features/photos/PhotosPage';
@@ -96,6 +97,10 @@ export const router = createBrowserRouter([
               {
                 path: '/client/workout',
                 element: <WorkoutProgram />,
+              },
+              {
+                path: '/client/nutrition',
+                element: <NutritionPage />,
               },
               {
                 path: '/client/calories',

@@ -397,7 +397,7 @@ export const CoachClientDetails: React.FC = () => {
                   </div>
                 </div>
                 {entry.notes && (
-                  <p className="mt-3 text-sm text-gray-600 bg-white p-3 rounded-lg border border-gray-100">
+                  <p className="mt-3 text-sm text-gray-600 bg-white dark:bg-gray-50 p-3 rounded-lg border border-gray-100">
                     "{entry.notes}"
                   </p>
                 )}
@@ -447,7 +447,7 @@ export const CoachClientDetails: React.FC = () => {
             <textarea 
               name="description" 
               required
-              className="w-full bg-white border-2 border-gray-200 rounded-lg px-4 py-2.5 outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-red-500/10 transition-all duration-200 min-h-[100px]"
+              className="w-full bg-white dark:bg-gray-100 border-2 border-gray-200 rounded-lg px-4 py-2.5 outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-red-500/10 transition-all duration-200 min-h-[100px]"
               placeholder="Program overview..."
             />
           </div>
@@ -505,7 +505,7 @@ export const CoachClientDetails: React.FC = () => {
             }
           }}
         >
-          <div className="p-4 bg-red-50 text-red-800 rounded-lg text-sm mb-4">
+          <div className="p-4 bg-red-50 dark:bg-red-950/20 text-red-800 dark:text-red-400 rounded-lg text-sm mb-4">
             Setting custom values here overrides the automatic calculator for this client.
           </div>
           <Input

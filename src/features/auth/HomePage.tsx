@@ -8,7 +8,7 @@ export const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[var(--background)]">
       {/* Navbar */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
+      <nav className="bg-white/80 dark:bg-gray-50/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="bg-[var(--primary)] text-white p-1.5 rounded-lg">
@@ -61,21 +61,21 @@ export const HomePage: React.FC = () => {
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-8 mt-24">
           <div className="card text-center hover:-translate-y-2 transition-transform duration-300">
-            <div className="w-16 h-16 mx-auto bg-red-50 text-[var(--primary)] rounded-full flex items-center justify-center mb-6">
+            <div className="w-16 h-16 mx-auto bg-red-50 dark:bg-red-950/20 text-[var(--primary)] rounded-full flex items-center justify-center mb-6">
               <ShieldCheck className="w-8 h-8" />
             </div>
             <h3 className="text-xl font-bold mb-3">Expert Guidance</h3>
             <p className="text-gray-600">Get personalized programs from certified coaches tailored exactly to your goals.</p>
           </div>
           <div className="card text-center hover:-translate-y-2 transition-transform duration-300">
-            <div className="w-16 h-16 mx-auto bg-orange-50 text-[var(--accent)] rounded-full flex items-center justify-center mb-6">
+            <div className="w-16 h-16 mx-auto bg-orange-50 dark:bg-orange-950/20 text-[var(--accent)] rounded-full flex items-center justify-center mb-6">
               <Zap className="w-8 h-8" />
             </div>
             <h3 className="text-xl font-bold mb-3">Progress Tracking</h3>
             <p className="text-gray-600">Log your workouts, track your calories, and watch your progress soar over time.</p>
           </div>
           <div className="card text-center hover:-translate-y-2 transition-transform duration-300">
-            <div className="w-16 h-16 mx-auto bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-6">
+            <div className="w-16 h-16 mx-auto bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mb-6">
               <Users className="w-8 h-8" />
             </div>
             <h3 className="text-xl font-bold mb-3">Direct Communication</h3>

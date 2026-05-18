@@ -1,13 +1,14 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Dumbbell, 
-  Utensils, 
-  LineChart, 
-  Camera, 
+import {
+  LayoutDashboard,
+  Users,
+  Dumbbell,
+  Utensils,
+  Calculator,
+  LineChart,
+  Camera,
   Settings,
   X
 } from 'lucide-react';
@@ -29,7 +30,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const clientLinks = [
     { to: '/client', icon: <LayoutDashboard />, label: 'Dashboard', end: true },
     { to: '/client/workout', icon: <Dumbbell />, label: 'Workout Program' },
-    { to: '/client/calories', icon: <Utensils />, label: 'Nutrition' },
+    { to: '/client/nutrition', icon: <Utensils />, label: 'Meal Diary' },
+    { to: '/client/calories', icon: <Calculator />, label: 'Calorie Calc' },
     { to: '/client/progress', icon: <LineChart />, label: 'Progress Tracking' },
     { to: '/client/photos', icon: <Camera />, label: 'Progress Photos' },
     { to: '/settings', icon: <Settings />, label: 'Settings' },
@@ -50,7 +52,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       {/* Sidebar Content */}
       <aside 
         className={`
-          fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-100 flex flex-col transition-transform duration-300 ease-in-out
+          fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-100 border-r border-gray-100 flex flex-col transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
       >
@@ -80,7 +82,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               className={({ isActive }) => `
                 flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200
                 ${isActive 
-                  ? 'bg-red-50 text-[var(--primary)]' 
+                  ? 'bg-red-50 dark:bg-red-950/20 text-[var(--primary)]' 
                   : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 }
               `}

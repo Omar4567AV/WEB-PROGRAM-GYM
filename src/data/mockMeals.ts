@@ -1,0 +1,81 @@
+import { MealEntry } from '../types/calories.types';
+
+const today = new Date().toISOString().split('T')[0];
+const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+export const mockMeals: MealEntry[] = [
+  {
+    id: 'meal-1',
+    clientId: 'client-1',
+    date: today,
+    mealType: 'breakfast',
+    name: 'Oats & Eggs',
+    calories: 450,
+    protein: 30,
+    carbs: 55,
+    fats: 10,
+    photoUrl: 'https://images.unsplash.com/photo-1517673400267-0251440c45dc?w=600',
+    notes: 'Rolled oats with 2 boiled eggs and banana',
+  },
+  {
+    id: 'meal-2',
+    clientId: 'client-1',
+    date: today,
+    mealType: 'lunch',
+    name: 'Chicken & Rice',
+    calories: 650,
+    protein: 50,
+    carbs: 75,
+    fats: 12,
+    photoUrl: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600',
+  },
+  {
+    id: 'meal-3',
+    clientId: 'client-1',
+    date: today,
+    mealType: 'snack',
+    name: 'Protein Shake',
+    calories: 200,
+    protein: 30,
+    carbs: 10,
+    fats: 3,
+    notes: 'Whey isolate with almond milk',
+  },
+  {
+    id: 'meal-4',
+    clientId: 'client-1',
+    date: yesterday,
+    mealType: 'breakfast',
+    name: 'Greek Yogurt & Fruits',
+    calories: 320,
+    protein: 20,
+    carbs: 45,
+    fats: 5,
+    photoUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600',
+  },
+  {
+    id: 'meal-5',
+    clientId: 'client-1',
+    date: yesterday,
+    mealType: 'lunch',
+    name: 'Tuna Salad',
+    calories: 380,
+    protein: 40,
+    carbs: 20,
+    fats: 15,
+  },
+  {
+    id: 'meal-6',
+    clientId: 'client-1',
+    date: yesterday,
+    mealType: 'dinner',
+    name: 'Grilled Salmon & Veggies',
+    calories: 520,
+    protein: 45,
+    carbs: 30,
+    fats: 20,
+    photoUrl: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600',
+  },
+];
+
+export default mockMeals;

@@ -38,12 +38,12 @@ export const LoginPage: React.FC = () => {
       </div>
 
       {/* For demo purposes, quick fill buttons */}
-      <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100 flex gap-2">
+      <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-100 dark:border-blue-900/30 flex gap-2">
         <Button 
           variant="outline" 
           size="sm" 
           fullWidth
-          className="bg-white"
+          className="bg-white dark:bg-gray-100"
           onClick={() => { setEmail('coach@gym.com'); setPassword('password123'); }}
         >
           Coach Demo
@@ -52,7 +52,7 @@ export const LoginPage: React.FC = () => {
           variant="outline" 
           size="sm" 
           fullWidth
-          className="bg-white"
+          className="bg-white dark:bg-gray-100"
           onClick={() => { setEmail('omar@client.com'); setPassword('password123'); }}
         >
           Client Demo

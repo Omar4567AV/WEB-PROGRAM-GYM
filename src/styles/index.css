@@ -15,6 +15,18 @@
     --card-bg: #ffffff;
     --border: #f3f4f6;
     --nav-bg: #ffffff;
+
+    /* Custom gray mapping for light mode */
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
   }
 
   .dark {
@@ -24,6 +36,18 @@
     --card-bg: #1e293b;
     --border: #334155;
     --nav-bg: #1e293b;
+
+    /* Custom gray mapping for dark mode (Slate-based theme) */
+    --gray-50: #0f172a;
+    --gray-100: #1e293b;
+    --gray-200: #334155;
+    --gray-300: #475569;
+    --gray-400: #64748b;
+    --gray-500: #94a3b8;
+    --gray-600: #cbd5e1;
+    --gray-700: #e2e8f0;
+    --gray-800: #f1f5f9;
+    --gray-900: #f8fafc;
   }
 
   body {
@@ -69,4 +93,8 @@
 /* Glassmorphism utility */
 .glass {
   @apply bg-white/80 backdrop-blur-md border border-white/20;
+}
+.dark .glass {
+  background-color: rgb(15 23 42 / 0.8);
+  border-color: rgb(255 255 255 / 0.1);
 }
