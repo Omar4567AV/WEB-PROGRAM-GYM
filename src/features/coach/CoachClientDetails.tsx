@@ -129,7 +129,11 @@ export const CoachClientDetails: React.FC = () => {
             <p className="text-gray-500 mb-4">{client.email}</p>
 
             <div className="w-full flex gap-2">
-              <Button fullWidth leftIcon={<MessageSquare className="w-4 h-4" />}>
+              <Button 
+                fullWidth 
+                leftIcon={<MessageSquare className="w-4 h-4" />}
+                onClick={() => navigate('/messages', { state: { contactId: client.id } })}
+              >
                 Message
               </Button>
             </div>

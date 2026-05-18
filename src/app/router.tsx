@@ -31,6 +31,7 @@ import NutritionPage from '../features/nutrition/NutritionPage';
 import WorkoutProgram from '../features/workout/WorkoutProgram';
 import ProgressTracking from '../features/progress/ProgressTracking';
 import PhotosPage from '../features/photos/PhotosPage';
+import MessagesPage from '../features/chat/MessagesPage';
 
 export const router = createBrowserRouter([
   // Public Routes
@@ -118,6 +119,10 @@ export const router = createBrowserRouter([
           },
 
           // Shared Protected Routes
+          {
+            path: '/messages',
+            element: <MessagesPage />,
+          },
           {
             path: '/settings',
             element: <SettingsPage />,
