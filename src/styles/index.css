@@ -12,6 +12,18 @@
     --background: #f8f8f8;
     --text-main: #1a1a1a;
     --text-muted: #666666;
+    --card-bg: #ffffff;
+    --border: #f3f4f6;
+    --nav-bg: #ffffff;
+  }
+
+  .dark {
+    --background: #0f172a;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --card-bg: #1e293b;
+    --border: #334155;
+    --nav-bg: #1e293b;
   }
 
   body {
@@ -30,7 +42,9 @@
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+    background-color: var(--card-bg);
+    border-color: var(--border);
+    @apply rounded-xl shadow-sm border p-6;
   }
 
   /* RTL Support helpers */
