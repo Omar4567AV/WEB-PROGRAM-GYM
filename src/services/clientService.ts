@@ -23,6 +23,32 @@ export const clientService = {
   },
 
   /**
+   * Create a new client under a coach
+   */
+  createClient: async (
+    coachId: string,
+    data: Omit<ClientProfile, 'id' | 'role' | 'createdAt' | 'coachId'>
+  ): Promise<ClientProfile> => {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    const newClient: ClientProfile = {
+      ...data,
+      id: 'client-' + Date.now(),
+      role: 'client',
+      coachId,
+      createdAt: new Date().toISOString(),
+    };
+    return newClient;
+  },
+
+  /**
+   * Delete a client by ID
+   */
+  deleteClient: async (id: string): Promise<boolean> => {
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    return true;
+  },
+
+  /**
    * Update client profile data
    */
   updateProfile: async (id: string, data: Partial<ClientProfile>): Promise<ClientProfile> => {

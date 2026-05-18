@@ -1,17 +1,18 @@
 import React from 'react';
 import { ClientProfile } from '../../types/user.types';
 import { Badge } from '../ui/Badge';
-import { User, Activity, Target } from 'lucide-react';
+import { User, Activity, Target, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface ClientCardProps {
   client: ClientProfile;
+  onDelete?: (id: string) => void;
 }
 
-export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
+export const ClientCard: React.FC<ClientCardProps> = ({ client, onDelete }) => {
   return (
     <Link to={`/coach/clients/${client.id}`} className="block">
-      <div className="card hover:border-[var(--primary)] transition-colors cursor-pointer group">
+      <div className="card hover:border-[var(--primary)] transition-colors cursor-pointer group relative">
         <div className="flex items-start gap-4">
           {/* Avatar */}
           <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 border-2 border-transparent group-hover:border-[var(--primary)] transition-colors">
@@ -49,6 +50,19 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
             </div>
           </div>
         </div>
+
+        {onDelete && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              onDelete(client.id);
+            }}
+            className="absolute top-3 right-3 p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all duration-200"
+            title="Remove client"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        )}
       </div>
     </Link>
   );

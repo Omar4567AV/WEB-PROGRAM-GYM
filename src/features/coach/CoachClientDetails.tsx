@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { clientService } from '../../services/clientService';
 import { ClientProfile } from '../../types/user.types';
 import { Badge, Button, Spinner, Modal, Input, Select } from '../../components/ui';
-import { ArrowLeft, User, Activity, Target, Calendar, MessageSquare, Dumbbell, Edit2 } from 'lucide-react';
+import { ArrowLeft, User, Activity, Target, Calendar, MessageSquare, Dumbbell, Edit2, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { formatDate } from '../../utils/formatters';
 import { useWorkout } from '../../hooks/useWorkout';
@@ -14,8 +14,10 @@ import { Program, ProgramType } from '../../types/workout.types';
 
 export const CoachClientDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [client, setClient] = useState<ClientProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const { program, updateProgram } = useWorkout(id);
   const [latestProgress, setLatestProgress] = useState<WeeklyEntry | null>(null);
@@ -50,6 +52,19 @@ export const CoachClientDetails: React.FC = () => {
     }
   }, [id]);
 
+  const handleDelete = async () => {
+    if (!id || !window.confirm(`Remove ${client?.name}? This cannot be undone.`)) return;
+    setIsDeleting(true);
+    try {
+      await clientService.deleteClient(id);
+      toast.success('Client removed');
+      navigate('/coach/clients', { replace: true });
+    } catch {
+      toast.error('Failed to remove client');
+      setIsDeleting(false);
+    }
+  };
+
   if (isLoading) return <Spinner size="lg" />;
   if (!client) return <div className="text-center py-12">Client not found</div>;
 
@@ -67,24 +82,34 @@ export const CoachClientDetails: React.FC = () => {
             <p className="text-gray-500 font-medium">Manage this client's programs and progress.</p>
           </div>
         </div>
-        <Button 
-          variant="outline" 
-          leftIcon={<Edit2 className="w-4 h-4" />}
-          onClick={() => {
-            setEditFormData({
-              goal: client.goal,
-              trainingLevel: client.trainingLevel,
-              weight: client.weight,
-              height: client.height,
-              age: client.age,
-              gender: client.gender,
-              activityLevel: client.activityLevel,
-            });
-            setIsEditModalOpen(true);
-          }}
-        >
-          Edit Client
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            leftIcon={<Edit2 className="w-4 h-4" />}
+            onClick={() => {
+              setEditFormData({
+                goal: client.goal,
+                trainingLevel: client.trainingLevel,
+                weight: client.weight,
+                height: client.height,
+                age: client.age,
+                gender: client.gender,
+                activityLevel: client.activityLevel,
+              });
+              setIsEditModalOpen(true);
+            }}
+          >
+            Edit Client
+          </Button>
+          <Button
+            variant="danger"
+            leftIcon={<Trash2 className="w-4 h-4" />}
+            onClick={handleDelete}
+            isLoading={isDeleting}
+          >
+            Remove Client
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

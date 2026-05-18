@@ -43,6 +43,14 @@ export const useClients = () => {
     });
   }, [clients, searchTerm, filterGoal]);
 
+  const prependClient = (client: ClientProfile) => {
+    setClients((prev) => [client, ...prev]);
+  };
+
+  const removeClient = (id: string) => {
+    setClients((prev) => prev.filter((c) => c.id !== id));
+  };
+
   return {
     clients: filteredClients,
     totalCount: clients.length,
@@ -51,6 +59,8 @@ export const useClients = () => {
     setSearchTerm,
     filterGoal,
     setFilterGoal,
+    prependClient,
+    removeClient,
   };
 };
 
