@@ -110,7 +110,7 @@ export const CoachClientDetails: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-gray-100 pb-5">
         <div className="flex items-center gap-4">
           <Link to="/coach/clients">
             <Button variant="ghost" size="sm" className="p-2">
@@ -122,7 +122,7 @@ export const CoachClientDetails: React.FC = () => {
             <p className="text-gray-500 font-medium">Manage this client's programs and progress.</p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-start sm:justify-end">
           <Button
             variant="outline"
             leftIcon={<Edit2 className="w-4 h-4" />}
@@ -152,7 +152,7 @@ export const CoachClientDetails: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         {/* Sidebar info */}
         <div className="space-y-6">
           <div className="card flex flex-col items-center text-center">
@@ -221,7 +221,7 @@ export const CoachClientDetails: React.FC = () => {
               <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                 <Dumbbell className="w-5 h-5 text-[var(--primary)]" /> Current Program
               </h3>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2 justify-end">
                 {program && (
                   <Link to={`/coach/clients/${id}/program`}>
                     <Button size="sm">Edit Exercises</Button>
@@ -261,7 +261,7 @@ export const CoachClientDetails: React.FC = () => {
               </Button>
             </div>
             {client.targetCalories ? (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div className="bg-gray-50 p-4 rounded-xl text-center">
                   <span className="text-gray-500 block text-xs uppercase font-bold tracking-wider mb-1">Calories</span>
                   <span className="font-bold text-2xl text-gray-900">{client.targetCalories}</span>
@@ -272,11 +272,11 @@ export const CoachClientDetails: React.FC = () => {
                 </div>
                 <div className="bg-gray-50 p-4 rounded-xl text-center">
                   <span className="text-gray-500 block text-xs uppercase font-bold tracking-wider mb-1">Carbs</span>
-                  <span className="font-bold text-2xl text-blue-500">{client.targetCarbs}g</span>
+                  <span className="font-bold text-2xl text-blue-600 dark:text-blue-400">{client.targetCarbs}g</span>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-xl text-center">
                   <span className="text-gray-500 block text-xs uppercase font-bold tracking-wider mb-1">Fats</span>
-                  <span className="font-bold text-2xl text-yellow-500">{client.targetFats}g</span>
+                  <span className="font-bold text-2xl text-yellow-600 dark:text-yellow-400">{client.targetFats}g</span>
                 </div>
               </div>
             ) : (
