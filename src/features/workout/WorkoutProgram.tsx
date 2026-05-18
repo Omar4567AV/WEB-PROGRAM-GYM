@@ -27,7 +27,7 @@ export const WorkoutProgram: React.FC = () => {
         <Badge variant="success" className="mb-4">Active Program</Badge>
         <h2 className="text-3xl font-bold text-gray-900 mb-2">{program.title}</h2>
         <p className="text-gray-500 font-medium text-lg">{program.description}</p>
-        
+
         <div className="flex gap-4 mt-6">
           <Badge variant="ghost" size="md">{program.type}</Badge>
           <Badge variant="ghost" size="md">Started {formatDate(program.startDate)}</Badge>
@@ -93,7 +93,7 @@ export const WorkoutProgram: React.FC = () => {
                 </table>
               </div>
             )}
-            
+
             {day.isRestDay && (
               <div className="p-8 text-center text-gray-500">
                 Focus on recovery, hydration, and stretching.

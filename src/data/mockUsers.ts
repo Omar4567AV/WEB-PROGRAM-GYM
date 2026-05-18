@@ -35,6 +35,7 @@ export const mockClients: (ClientProfile & { password: string })[] = [
     activityLevel: 'moderate',
     trainingLevel: 'intermediate',
     coachId: 'coach-1',
+    subscriptionStatus: 'active',
     createdAt: '2024-01-15T10:00:00Z',
   },
   {
@@ -52,6 +53,7 @@ export const mockClients: (ClientProfile & { password: string })[] = [
     activityLevel: 'active',
     trainingLevel: 'beginner',
     coachId: 'coach-1',
+    subscriptionStatus: 'active',
     createdAt: '2024-02-01T10:00:00Z',
   },
   {
@@ -69,6 +71,7 @@ export const mockClients: (ClientProfile & { password: string })[] = [
     activityLevel: 'sedentary',
     trainingLevel: 'beginner',
     coachId: 'coach-1',
+    subscriptionStatus: 'active',
     createdAt: '2024-02-10T10:00:00Z',
   },
   {
@@ -86,6 +89,7 @@ export const mockClients: (ClientProfile & { password: string })[] = [
     activityLevel: 'very-active',
     trainingLevel: 'advanced',
     coachId: 'coach-1',
+    subscriptionStatus: 'active',
     createdAt: '2024-03-05T10:00:00Z',
   },
   {
@@ -103,6 +107,7 @@ export const mockClients: (ClientProfile & { password: string })[] = [
     activityLevel: 'moderate',
     trainingLevel: 'intermediate',
     coachId: 'coach-1',
+    subscriptionStatus: 'active',
     createdAt: '2024-03-20T10:00:00Z',
   },
 ];

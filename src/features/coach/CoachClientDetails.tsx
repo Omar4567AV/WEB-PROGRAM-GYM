@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { clientService } from '../../services/clientService';
 import { ClientProfile } from '../../types/user.types';
 import { Badge, Button, Spinner, Modal, Input, Select } from '../../components/ui';
-import { ArrowLeft, User, Activity, Target, Calendar, MessageSquare, Dumbbell, Edit2, Trash2 } from 'lucide-react';
+import { ArrowLeft, User, Activity, Target, Calendar, MessageSquare, Dumbbell, Edit2, Trash2, Zap } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { formatDate } from '../../utils/formatters';
 import { useWorkout } from '../../hooks/useWorkout';
@@ -11,6 +11,7 @@ import { ProgramCard } from '../../components/cards';
 import { progressService } from '../../services/progressService';
 import { WeeklyEntry } from '../../types/progress.types';
 import { Program, ProgramType } from '../../types/workout.types';
+import { generatePlanForClient } from '../../utils/generator';
 
 export const CoachClientDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -27,6 +28,7 @@ export const CoachClientDetails: React.FC = () => {
   const [isProgramModalOpen, setIsProgramModalOpen] = useState(false);
   const [isDietModalOpen, setIsDietModalOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [editFormData, setEditFormData] = useState<Partial<ClientProfile>>({});
   const [dietFormData, setDietFormData] = useState<{
     targetCalories?: number;
@@ -34,6 +36,44 @@ export const CoachClientDetails: React.FC = () => {
     targetCarbs?: number;
     targetFats?: number;
   }>({});
+
+  const handleAutoGeneratePlan = async () => {
+    if (!client || !id) return;
+    setIsGenerating(true);
+    try {
+      const plan = generatePlanForClient(client);
+
+      // 1. Update diet targets in client profile
+      const updatedClient = await clientService.updateProfile(id, {
+        targetCalories: plan.targetCalories,
+        targetProtein: plan.targetProtein,
+        targetCarbs: plan.targetCarbs,
+        targetFats: plan.targetFats,
+      });
+      setClient(updatedClient);
+
+      // 2. Create and save active workout program
+      const newProgram: Program = {
+        id: 'prog-' + Date.now(),
+        clientId: id as string,
+        coachId: client.coachId || '',
+        title: plan.workoutProgram.title,
+        description: plan.workoutProgram.description,
+        type: plan.workoutProgram.type,
+        startDate: new Date().toISOString().split('T')[0],
+        isActive: true,
+        days: plan.workoutProgram.days,
+      };
+      await updateProgram(newProgram);
+
+      toast.success('AI Plan and Workout split generated perfectly!');
+    } catch (err) {
+      toast.error('Failed to generate AI Plan');
+      console.error(err);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   useEffect(() => {
     if (id) {
@@ -129,8 +169,8 @@ export const CoachClientDetails: React.FC = () => {
             <p className="text-gray-500 mb-4">{client.email}</p>
 
             <div className="w-full flex gap-2">
-              <Button 
-                fullWidth 
+              <Button
+                fullWidth
                 leftIcon={<MessageSquare className="w-4 h-4" />}
                 onClick={() => navigate('/messages', { state: { contactId: client.id } })}
               >
@@ -154,6 +194,23 @@ export const CoachClientDetails: React.FC = () => {
               <span className="text-gray-500">Joined</span>
               <span className="font-bold">{formatDate(client.createdAt)}</span>
             </div>
+          </div>
+
+          <div className="card bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/10 dark:to-orange-950/10 border border-red-100 dark:border-red-900/20 p-5 rounded-2xl space-y-4">
+            <h4 className="font-bold text-gray-900 m-0 flex items-center gap-2">
+              <Zap className="w-5 h-5 text-[var(--primary)] animate-bounce" /> Auto-Schedule AI
+            </h4>
+            <p className="text-xs text-gray-600 font-medium leading-relaxed m-0">
+              Instantly generate an optimized 7-day training schedule and scientific macro-nutrition targets tailored to this client's profile.
+            </p>
+            <Button
+              fullWidth
+              size="sm"
+              onClick={handleAutoGeneratePlan}
+              isLoading={isGenerating}
+            >
+              Generate Program & Diet
+            </Button>
           </div>
         </div>
 

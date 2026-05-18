@@ -135,7 +135,7 @@ export const chatService = {
         return {
           id: client.id,
           name: client.name,
-          role: 'client',
+          role: 'client' as 'client' | 'coach',
           avatarUrl: client.avatarUrl,
           lastMessage: lastMsg ? lastMsg.content : undefined,
           lastMessageTime: lastMsg ? lastMsg.timestamp : undefined,
@@ -163,7 +163,7 @@ export const chatService = {
         {
           id: mockCoach.id,
           name: mockCoach.name,
-          role: 'coach',
+          role: 'coach' as 'client' | 'coach',
           avatarUrl: mockCoach.avatarUrl,
           lastMessage: lastMsg ? lastMsg.content : 'Send your first message to Coach Ahmed!',
           lastMessageTime: lastMsg ? lastMsg.timestamp : undefined,

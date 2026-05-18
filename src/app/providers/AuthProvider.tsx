@@ -12,7 +12,19 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<User>;
+  registerClient: (userData: {
+    name: string;
+    email: string;
+    phone: string;
+    age: number;
+    gender: 'male' | 'female';
+    goal: 'fat-loss' | 'maintenance' | 'muscle-gain';
+    weight: number;
+    height: number;
+    preferredLanguage: 'en' | 'ar';
+  }) => Promise<User>;
   logout: () => void;
+  updateUserSubscription: (status: 'active' | 'failed') => void;
 }
 
 /**
@@ -51,6 +63,53 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const registerClient = async (userData: any): Promise<User> => {
+    try {
+      setIsLoading(true);
+      const { user: registeredUser } = await authService.registerClient(userData);
+      setUser(registeredUser);
+      toast.success('Registration successful! Setup your subscription plan next.');
+      return registeredUser;
+    } catch (error: any) {
+      toast.error(error.message || 'Registration failed');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateUserSubscription = (status: 'active' | 'failed') => {
+    if (user) {
+      const updatedUser = { ...user, subscriptionStatus: status };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      
+      // Update in localStorage lists of registered users so persistent session reflects it
+      const storedClientsStr = localStorage.getItem('coach_pro_clients_users');
+      if (storedClientsStr) {
+        const storedClients: User[] = JSON.parse(storedClientsStr);
+        const index = storedClients.findIndex((u) => u.id === user.id);
+        if (index !== -1) {
+          storedClients[index].subscriptionStatus = status;
+          localStorage.setItem('coach_pro_clients_users', JSON.stringify(storedClients));
+        }
+      }
+      
+      // Also update in coach_pro_clients list
+      const key = 'coach_pro_clients';
+      const existingClients = localStorage.getItem(key);
+      if (existingClients) {
+        const clientsList = JSON.parse(existingClients);
+        const idx = clientsList.findIndex((c: any) => c.id === user.id);
+        if (idx !== -1) {
+          clientsList[idx].subscriptionStatus = status;
+          clientsList[idx].status = status === 'active' ? 'active' : 'pending';
+          localStorage.setItem(key, JSON.stringify(clientsList));
+        }
+      }
+    }
+  };
+
   const logout = () => {
     authService.logout();
     setUser(null);
@@ -63,7 +122,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     isAuthenticated: !!user,
     isLoading,
     login,
+    registerClient,
     logout,
+    updateUserSubscription,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

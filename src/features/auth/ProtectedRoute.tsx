@@ -3,7 +3,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 export const ProtectedRoute: React.FC = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
 
   if (isLoading) {
@@ -17,6 +17,16 @@ export const ProtectedRoute: React.FC = () => {
   if (!isAuthenticated) {
     // Redirect to login while saving the attempted url
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // If role is client and subscription status is not active, force redirect to /checkout
+  if (user?.role === 'client' && user?.subscriptionStatus !== 'active' && location.pathname !== '/checkout') {
+    return <Navigate to="/checkout" replace />;
+  }
+
+  // If role is client, subscription status IS active, and trying to open /checkout, redirect to client home
+  if (user?.role === 'client' && user?.subscriptionStatus === 'active' && location.pathname === '/checkout') {
+    return <Navigate to="/client" replace />;
   }
 
   return <Outlet />;

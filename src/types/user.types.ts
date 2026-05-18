@@ -13,6 +13,7 @@ export interface User {
   role: UserRole;
   avatarUrl?: string;
   createdAt: string;
+  subscriptionStatus?: 'pending' | 'active' | 'failed';
 }
 
 /**
@@ -28,6 +29,8 @@ export interface ClientProfile extends User {
   activityLevel: 'sedentary' | 'light' | 'moderate' | 'active' | 'very-active';
   trainingLevel: 'beginner' | 'intermediate' | 'advanced';
   coachId?: string;
+  phone?: string;
+  preferredLanguage?: 'en' | 'ar';
   // Custom coach overrides for diet
   targetCalories?: number;
   targetProtein?: number;

@@ -11,7 +11,8 @@ import RoleRoute from '../features/auth/RoleRoute';
 // Auth Features
 import HomePage from '../features/auth/HomePage';
 import LoginPage from '../features/auth/LoginPage';
-import RegisterPage from '../features/auth/RegisterPage';
+import RegisterClientPage from '../features/auth/pages/RegisterClientPage';
+import CheckoutPage from '../features/auth/pages/CheckoutPage';
 import NotFoundPage from '../features/auth/NotFoundPage';
 
 // Client Features
@@ -48,15 +49,19 @@ export const router = createBrowserRouter([
       },
       {
         path: '/register',
-        element: <RegisterPage />,
+        element: <RegisterClientPage />,
       },
     ],
   },
 
-  // Protected Dashboard Routes
+  // Protected Routes
   {
     element: <ProtectedRoute />,
     children: [
+      {
+        path: '/checkout',
+        element: <CheckoutPage />,
+      },
       {
         element: <DashboardLayout />,
         children: [
@@ -82,7 +87,7 @@ export const router = createBrowserRouter([
               },
             ],
           },
-          
+
           // Client Routes
           {
             element: <RoleRoute allowedRoles={['client']} />,
