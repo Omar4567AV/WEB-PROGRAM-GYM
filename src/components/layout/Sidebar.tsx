@@ -53,20 +53,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       {/* Sidebar Content */}
       <aside
         className={`
-          fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-100 border-r border-gray-100 flex flex-col transition-transform duration-300 ease-in-out
+          fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-[#111111] border-r border-gray-100 dark:border-[#262626] flex flex-col transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
       >
-        <div className="h-16 flex items-center justify-between px-6 border-b border-gray-100">
+        <div className="h-20 flex items-center justify-between px-6 border-b border-gray-100 dark:border-[#262626]">
           <div className="flex items-center gap-3">
             <div className="bg-[var(--primary)] text-white p-1.5 rounded-lg shadow-lg shadow-red-500/30">
               <Dumbbell className="w-6 h-6" />
             </div>
-            <span className="text-xl font-bold font-['Oswald'] tracking-wider text-gray-900">
+            <span className="text-xl font-bold font-['Oswald'] tracking-wider text-gray-900 dark:text-white">
               COACH<span className="text-[var(--primary)]">PRO</span>
             </span>
           </div>
-          <button onClick={onClose} className="lg:hidden text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="lg:hidden text-gray-400 hover:text-gray-600 dark:hover:text-neutral-200">
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -83,8 +83,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               className={({ isActive }) => `
                 flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200
                 ${isActive
-                  ? 'bg-red-50 dark:bg-red-950/20 text-[var(--primary)]'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  ? 'bg-red-50 dark:bg-red-500/10 text-[var(--primary)] dark:text-red-500'
+                  : 'text-gray-600 dark:text-neutral-400 hover:bg-gray-50 dark:hover:bg-[#262626] hover:text-gray-900 dark:hover:text-white'
                 }
               `}
             >
