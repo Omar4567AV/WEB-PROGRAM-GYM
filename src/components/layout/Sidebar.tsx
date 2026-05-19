@@ -31,7 +31,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const clientLinks = [
     { to: '/client', icon: <LayoutDashboard />, label: 'Dashboard', end: true },
     { to: '/client/workout', icon: <Dumbbell />, label: 'Workout Program' },
-    { to: '/client/calories', icon: <Utensils />, label: 'Nutrition' },
+    { to: '/client/nutrition', icon: <Utensils />, label: 'Meal Diary' },
+    { to: '/client/calories', icon: <LineChart />, label: 'Nutrition Plan' },
     { to: '/client/progress', icon: <LineChart />, label: 'Progress Tracking' },
     { to: '/client/photos', icon: <Camera />, label: 'Progress Photos' },
     { to: '/messages', icon: <MessageSquare />, label: 'Messages' },
