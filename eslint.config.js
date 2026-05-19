@@ -25,6 +25,9 @@ export default defineConfig([
         destructuredArrayIgnorePattern: '^_',
         caughtErrorsIgnorePattern: '^_',
       }],
+      // Standard data-fetching pattern (setLoading → fetch → setData) is valid;
+      // this React-Compiler-era rule is too strict for this codebase.
+      'react-hooks/set-state-in-effect': 'off',
     },
   },
 ])

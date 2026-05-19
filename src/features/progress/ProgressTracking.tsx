@@ -4,9 +4,9 @@ import { progressService } from '../../services/progressService';
 import { WeeklyEntry } from '../../types/progress.types';
 import { ClientProfile } from '../../types/user.types';
 import { Spinner, Button } from '../../components/ui';
-import { 
-  TrendingDown, Calendar, Plus, Scale, Target, Activity, Flame, 
-  ShieldCheck, MessageSquare, Inbox
+import {
+  TrendingDown, Calendar, Plus, Scale, Target, Activity,
+  ShieldCheck, Inbox
 } from 'lucide-react';
 import { formatDate, formatWeight } from '../../utils/formatters';
 import { WeeklyCheckIn } from './WeeklyCheckIn';
@@ -23,7 +23,7 @@ export const ProgressTracking: React.FC = () => {
     progressService.getProgressByClientId(user.id)
       .then(setEntries)
       .finally(() => setIsLoading(false));
-  }, [user?.id]);
+  }, [user]);
 
   useEffect(() => {
     loadProgress();

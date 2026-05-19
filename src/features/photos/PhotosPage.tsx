@@ -20,7 +20,7 @@ export const PhotosPage: React.FC = () => {
     photoService.getPhotosByClientId(user.id)
       .then(setPhotos)
       .finally(() => setIsLoading(false));
-  }, [user?.id]);
+  }, [user]);
 
   useEffect(() => {
     loadPhotos();

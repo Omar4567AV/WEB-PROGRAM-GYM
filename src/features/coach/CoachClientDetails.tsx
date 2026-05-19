@@ -328,7 +328,7 @@ export const CoachClientDetails: React.FC = () => {
           <Select
             label="Goal"
             value={editFormData.goal || ''}
-            onChange={(e) => setEditFormData({ ...editFormData, goal: e.target.value as any })}
+            onChange={(e) => setEditFormData({ ...editFormData, goal: e.target.value as ClientProfile['goal'] })}
             options={[
               { value: 'fat-loss', label: 'Fat Loss' },
               { value: 'muscle-gain', label: 'Muscle Gain' },
@@ -338,7 +338,7 @@ export const CoachClientDetails: React.FC = () => {
           <Select
             label="Activity Level"
             value={editFormData.activityLevel || ''}
-            onChange={(e) => setEditFormData({ ...editFormData, activityLevel: e.target.value as any })}
+            onChange={(e) => setEditFormData({ ...editFormData, activityLevel: e.target.value as ClientProfile['activityLevel'] })}
             options={[
               { value: 'sedentary', label: 'Sedentary' },
               { value: 'light', label: 'Lightly Active' },
@@ -350,7 +350,7 @@ export const CoachClientDetails: React.FC = () => {
           <Select
             label="Training Level"
             value={editFormData.trainingLevel || ''}
-            onChange={(e) => setEditFormData({ ...editFormData, trainingLevel: e.target.value as any })}
+            onChange={(e) => setEditFormData({ ...editFormData, trainingLevel: e.target.value as ClientProfile['trainingLevel'] })}
             options={[
               { value: 'beginner', label: 'Beginner' },
               { value: 'intermediate', label: 'Intermediate' },
@@ -443,7 +443,7 @@ export const CoachClientDetails: React.FC = () => {
               };
               await updateProgram(newProgram);
               setIsProgramModalOpen(false);
-            } catch (err) {
+            } catch {
               // handled by hook
             } finally {
               setIsSaving(false);
@@ -507,7 +507,7 @@ export const CoachClientDetails: React.FC = () => {
               setClient(updated);
               toast.success('Diet targets updated successfully');
               setIsDietModalOpen(false);
-            } catch (err) {
+            } catch {
               toast.error('Failed to update diet');
             } finally {
               setIsSaving(false);
