@@ -33,7 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
   };
 
   return (
-    <header className="h-16 sticky top-0 z-20 border-b" style={{ backgroundColor: 'var(--nav-bg)', borderColor: 'var(--border)' }}>
+    <header className="h-20 sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
         <div className="flex items-center">
           <button 
