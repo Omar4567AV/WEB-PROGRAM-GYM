@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useWorkout } from '../../hooks/useWorkout';
 import { progressService } from '../../services/progressService';
+import { notificationService } from '../../services/notificationService';
 import { WeeklyEntry } from '../../types/progress.types';
 import { StatCard, ProgramCard } from '../../components/cards';
-import { Dumbbell, Target, TrendingDown, Scale } from 'lucide-react';
+import { Dumbbell, Target, TrendingDown, Scale, Zap, Utensils } from 'lucide-react';
 import { formatWeight, formatDate } from '../../utils/formatters';
+import { toast } from 'react-hot-toast';
 
 export const ClientDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -16,6 +18,71 @@ export const ClientDashboard: React.FC = () => {
     if (user?.id) {
       progressService.getLatestEntry(user.id).then(setLatestProgress);
     }
+  }, [user?.id]);
+
+  // ── Check for coach updates and show notification toasts ──────────────────
+  useEffect(() => {
+    if (!user?.id) return;
+
+    // Small delay so the dashboard has rendered before the toast appears
+    const timer = setTimeout(() => {
+      const notification = notificationService.getUnseenNotification(user.id);
+      if (!notification) return;
+
+      const { type } = notification;
+
+      if (type === 'program') {
+        toast(
+          () => (
+            <div className="flex items-start gap-3">
+              <div className="bg-red-50 text-[var(--primary)] p-2 rounded-xl shrink-0">
+                <Dumbbell className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="font-bold text-gray-900 text-sm">Workout Program Updated!</p>
+                <p className="text-xs text-gray-500 mt-0.5">Your coach has assigned a new workout program. Check your Workout page.</p>
+              </div>
+            </div>
+          ),
+          { duration: 6000, style: { padding: '12px 16px', maxWidth: '380px' } }
+        );
+      } else if (type === 'diet') {
+        toast(
+          () => (
+            <div className="flex items-start gap-3">
+              <div className="bg-amber-50 text-amber-600 p-2 rounded-xl shrink-0">
+                <Utensils className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="font-bold text-gray-900 text-sm">Nutrition Plan Updated!</p>
+                <p className="text-xs text-gray-500 mt-0.5">Your coach has updated your calorie &amp; macro targets. Check your Nutrition Plan.</p>
+              </div>
+            </div>
+          ),
+          { duration: 6000, style: { padding: '12px 16px', maxWidth: '380px' } }
+        );
+      } else if (type === 'both') {
+        toast(
+          () => (
+            <div className="flex items-start gap-3">
+              <div className="bg-red-50 text-[var(--primary)] p-2 rounded-xl shrink-0">
+                <Zap className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="font-bold text-gray-900 text-sm">Program &amp; Nutrition Updated!</p>
+                <p className="text-xs text-gray-500 mt-0.5">Your coach has updated both your workout program and nutrition targets.</p>
+              </div>
+            </div>
+          ),
+          { duration: 7000, style: { padding: '12px 16px', maxWidth: '380px' } }
+        );
+      }
+
+      // Mark as seen so it won't show again on next visit
+      notificationService.markSeen(user.id);
+    }, 800);
+
+    return () => clearTimeout(timer);
   }, [user?.id]);
 
   if (!user || user.role !== 'client') return null;

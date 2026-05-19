@@ -1,5 +1,6 @@
 import { ClientProfile } from '../types/user.types';
 import { mockClients } from '../data/mockClients';
+import { notificationService } from './notificationService';
 
 const CLIENTS_KEY = 'coach_pro_clients';
 
@@ -77,6 +78,14 @@ export const clientService = {
     const updated = { ...clients[index], ...data };
     clients[index] = updated;
     localStorage.setItem(CLIENTS_KEY, JSON.stringify(clients));
+
+    // Notify client if coach updated their diet / nutrition targets
+    const dietFields: (keyof ClientProfile)[] = ['targetCalories', 'targetProtein', 'targetCarbs', 'targetFats'];
+    const hasDietUpdate = dietFields.some((field) => field in data);
+    if (hasDietUpdate) {
+      notificationService.writeNotification(id, 'diet');
+    }
+
     return updated;
   },
 };

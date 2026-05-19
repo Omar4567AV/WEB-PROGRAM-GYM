@@ -1,5 +1,6 @@
 import { Program } from '../types/workout.types';
 import { mockPrograms } from '../data/mockPrograms';
+import { notificationService } from './notificationService';
 
 const PROGRAMS_KEY = 'coach_pro_programs';
 
@@ -57,6 +58,12 @@ export const workoutService = {
     }
 
     localStorage.setItem(PROGRAMS_KEY, JSON.stringify(programs));
+
+    // Notify the client that their workout program has been updated
+    if (program.clientId) {
+      notificationService.writeNotification(program.clientId, 'program');
+    }
+
     return program;
   },
 
