@@ -26,6 +26,8 @@ interface AuthContextType {
   }) => Promise<User>;
   logout: () => void;
   updateUserSubscription: (status: 'active' | 'failed') => void;
+  /** Sync the in-memory user and the auth session localStorage entry with a partial update */
+  updateCurrentUser: (partial: Partial<User>) => void;
 }
 
 /**
@@ -54,7 +56,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setIsLoading(true);
       const { user: loggedInUser } = await authService.login(email, password);
       setUser(loggedInUser);
-      toast.success(`Welcome back, ${loggedInUser.name}!`);
       return loggedInUser;
     } catch (error: any) {
       toast.error(error.message || 'Login failed');
@@ -69,7 +70,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setIsLoading(true);
       const { user: registeredUser } = await authService.registerClient(userData);
       setUser(registeredUser);
-      toast.success('Registration successful! Setup your subscription plan next.');
       return registeredUser;
     } catch (error: any) {
       toast.error(error.message || 'Registration failed');
@@ -111,10 +111,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  /** Merges a partial update into the current auth-session user (state + localStorage). */
+  const updateCurrentUser = (partial: Partial<User>) => {
+    if (!user) return;
+    const updatedUser = { ...user, ...partial };
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+  };
+
   const logout = () => {
     authService.logout();
     setUser(null);
-    toast.success('Logged out successfully');
   };
 
   const value = {
@@ -126,6 +133,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     registerClient,
     logout,
     updateUserSubscription,
+    updateCurrentUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

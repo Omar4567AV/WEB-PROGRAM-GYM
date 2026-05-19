@@ -44,7 +44,7 @@ export const ClientDashboard: React.FC = () => {
               </div>
             </div>
           ),
-          { duration: 6000, style: { padding: '12px 16px', maxWidth: '380px' } }
+          { duration: 3000, style: { padding: '12px 16px', maxWidth: '380px' } }
         );
       } else if (type === 'diet') {
         toast(
@@ -59,7 +59,7 @@ export const ClientDashboard: React.FC = () => {
               </div>
             </div>
           ),
-          { duration: 6000, style: { padding: '12px 16px', maxWidth: '380px' } }
+          { duration: 3000, style: { padding: '12px 16px', maxWidth: '380px' } }
         );
       } else if (type === 'both') {
         toast(
@@ -74,7 +74,7 @@ export const ClientDashboard: React.FC = () => {
               </div>
             </div>
           ),
-          { duration: 7000, style: { padding: '12px 16px', maxWidth: '380px' } }
+          { duration: 3000, style: { padding: '12px 16px', maxWidth: '380px' } }
         );
       }
 
