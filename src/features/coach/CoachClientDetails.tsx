@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { clientService } from '../../services/clientService';
 import { ClientProfile } from '../../types/user.types';
 import { Badge, Button, Spinner, Modal, Input, Select } from '../../components/ui';
-import { ArrowLeft, User, Activity, Target, Calendar, MessageSquare, Dumbbell, Edit2, Trash2 } from 'lucide-react';
+import { ArrowLeft, User, Activity, Target, MessageSquare, Dumbbell, Edit2, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { formatDate } from '../../utils/formatters';
 import { useWorkout } from '../../hooks/useWorkout';
@@ -35,22 +35,27 @@ export const CoachClientDetails: React.FC = () => {
     targetFats?: number;
   }>({});
 
-  useEffect(() => {
-    if (id) {
-      setIsLoading(true);
-      Promise.all([
+  const loadClientData = useCallback(async () => {
+    if (!id) return;
+    setIsLoading(true);
+    try {
+      const [clientData, progressData] = await Promise.all([
         clientService.getClientById(id),
-        progressService.getProgressByClientId(id)
-      ])
-        .then(([clientData, progressData]) => {
-          setClient(clientData);
-          setAllProgress(progressData);
-          setLatestProgress(progressData.length > 0 ? progressData[0] : null);
-        })
-        .catch(console.error)
-        .finally(() => setIsLoading(false));
+        progressService.getProgressByClientId(id),
+      ]);
+      setClient(clientData);
+      setAllProgress(progressData);
+      setLatestProgress(progressData.length > 0 ? progressData[0] : null);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
+
+  useEffect(() => {
+    loadClientData();
+  }, [loadClientData]);
 
   const handleDelete = async () => {
     if (!id || !window.confirm(`Remove ${client?.name}? This cannot be undone.`)) return;
@@ -282,7 +287,7 @@ export const CoachClientDetails: React.FC = () => {
               setClient(updated);
               toast.success('Client updated successfully');
               setIsEditModalOpen(false);
-            } catch (err) {
+            } catch {
               toast.error('Failed to update client');
             } finally {
               setIsSaving(false);
@@ -293,7 +298,7 @@ export const CoachClientDetails: React.FC = () => {
             <Select
               label="Gender"
               value={editFormData.gender || ''}
-              onChange={(e) => setEditFormData({ ...editFormData, gender: e.target.value as any })}
+              onChange={(e) => setEditFormData({ ...editFormData, gender: e.target.value as ClientProfile['gender'] })}
               options={[
                 { value: 'male', label: 'Male' },
                 { value: 'female', label: 'Female' },

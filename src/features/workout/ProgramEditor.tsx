@@ -14,7 +14,7 @@ export const ProgramEditor: React.FC = () => {
   const [editedProgram, setEditedProgram] = useState<Program | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  const initFromProgram = useCallback(() => {
+  const initFromProgram = useCallback(async () => {
     if (program) {
       setEditedProgram(JSON.parse(JSON.stringify(program)));
     }
@@ -79,7 +79,7 @@ export const ProgramEditor: React.FC = () => {
     });
   };
 
-  const updateExercise = (dayId: string, exId: string, field: keyof Exercise, value: any) => {
+  const updateExercise = (dayId: string, exId: string, field: keyof Exercise, value: Exercise[keyof Exercise]) => {
     setEditedProgram({
       ...editedProgram,
       days: editedProgram.days.map(d => {
@@ -139,7 +139,7 @@ export const ProgramEditor: React.FC = () => {
                   value={day.dayName}
                   onChange={(e) => {
                     const newDays = [...editedProgram.days];
-                    newDays[dayIndex].dayName = e.target.value as any;
+                    newDays[dayIndex].dayName = e.target.value as WorkoutDay['dayName'];
                     setEditedProgram({ ...editedProgram, days: newDays });
                   }}
                 >
@@ -168,7 +168,7 @@ export const ProgramEditor: React.FC = () => {
 
             {!day.isRestDay ? (
               <div className="space-y-4">
-                {day.exercises.map((ex, exIndex) => (
+                {day.exercises.map((ex) => (
                   <div key={ex.id} className="grid grid-cols-12 gap-4 items-center bg-gray-50 p-4 rounded-xl border border-gray-100">
                     <div className="col-span-12 md:col-span-4">
                       <Input 

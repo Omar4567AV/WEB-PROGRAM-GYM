@@ -12,7 +12,7 @@ export const calculateCalories = (
   height: number, // cm
   weight: number, // kg
   activity: ActivityLevel,
-  goal: 'fat-loss' | 'maintenance' | 'muscle-gain'
+  _goal: 'fat-loss' | 'maintenance' | 'muscle-gain'
 ): CalorieResult => {
   // 1. Calculate BMR (Mifflin-St Jeor)
   let bmr = (10 * weight) + (6.25 * height) - (5 * age);

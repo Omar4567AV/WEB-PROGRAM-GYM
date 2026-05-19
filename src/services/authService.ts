@@ -32,7 +32,7 @@ export const authService = {
     );
 
     if (mockUser) {
-      const { password, ...user } = mockUser;
+      const { password: _password, ...user } = mockUser;
       const token = 'mock-jwt-token-' + user.id;
       
       localStorage.setItem('token', token);
@@ -107,7 +107,7 @@ export const authService = {
   /**
    * Mock registration function (generic)
    */
-  register: async (userData: any): Promise<{ user: User; token: string }> => {
+  register: async (userData: { name: string; email: string; password?: string }): Promise<{ user: User; token: string }> => {
     await new Promise((resolve) => setTimeout(resolve, 800));
     
     const newUser: User = {
@@ -142,7 +142,7 @@ export const authService = {
     if (userStr) {
       try {
         return JSON.parse(userStr);
-      } catch (e) {
+      } catch {
         return null;
       }
     }

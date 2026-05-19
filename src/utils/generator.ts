@@ -1,5 +1,5 @@
 import { ClientProfile } from '../types/user.types';
-import { Program, ProgramType, WorkoutDay, Exercise } from '../types/workout.types';
+import { Program, ProgramType, WorkoutDay } from '../types/workout.types';
 
 export interface GeneratedPlan {
   targetCalories: number;
@@ -85,10 +85,10 @@ export const generatePlanForClient = (client: Partial<ClientProfile>): Generated
   const targetCarbs = Math.max(50, Math.round(remainingCalories / 4));
 
   // 2. FITNESS PROGRAM GENERATION
-  let programTitle = '';
-  let programDescription = '';
-  let programType: ProgramType = 'Full Body';
-  let days: WorkoutDay[] = [];
+  let programTitle: string;
+  let programDescription: string;
+  let programType: ProgramType;
+  let days: WorkoutDay[];
 
   const exerciseId = () => `ex-gen-${Math.random().toString(36).substr(2, 9)}`;
   const dayId = () => `day-gen-${Math.random().toString(36).substr(2, 9)}`;

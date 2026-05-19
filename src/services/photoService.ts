@@ -31,7 +31,7 @@ export const photoService = {
   /**
    * Delete a progress photo
    */
-  deletePhoto: async (id: string): Promise<boolean> => {
+  deletePhoto: async (_id: string): Promise<boolean> => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     return true;
   },
