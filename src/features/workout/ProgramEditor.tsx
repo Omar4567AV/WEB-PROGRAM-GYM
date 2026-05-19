@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useWorkout } from '../../hooks/useWorkout';
 import { Program, WorkoutDay, Exercise } from '../../types/workout.types';
@@ -14,11 +14,15 @@ export const ProgramEditor: React.FC = () => {
   const [editedProgram, setEditedProgram] = useState<Program | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  useEffect(() => {
+  const initFromProgram = useCallback(() => {
     if (program) {
-      setEditedProgram(JSON.parse(JSON.stringify(program))); // Deep copy
+      setEditedProgram(JSON.parse(JSON.stringify(program)));
     }
   }, [program]);
+
+  useEffect(() => {
+    initFromProgram();
+  }, [initFromProgram]);
 
   if (isLoading || !editedProgram) return <Spinner size="lg" />;
 
@@ -28,7 +32,7 @@ export const ProgramEditor: React.FC = () => {
       await updateProgram(editedProgram);
       toast.success('Program exercises updated successfully');
       navigate(`/coach/clients/${id}`);
-    } catch (e) {
+    } catch {
       toast.error('Failed to save program');
     } finally {
       setIsSaving(false);

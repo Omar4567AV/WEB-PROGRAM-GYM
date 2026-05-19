@@ -89,7 +89,7 @@ export const CaloriesCalculator: React.FC = () => {
             <Select
               label="Activity Level"
               value={activity}
-              onChange={(e) => setActivity(e.target.value as any)}
+              onChange={(e) => setActivity(e.target.value as typeof activity)}
               options={[
                 { value: 'sedentary', label: 'Sedentary (Office job, no exercise)' },
                 { value: 'light', label: 'Lightly Active (1-3 days/week)' },
@@ -102,7 +102,7 @@ export const CaloriesCalculator: React.FC = () => {
             <Select
               label="Primary Goal"
               value={goal}
-              onChange={(e) => setGoal(e.target.value as any)}
+              onChange={(e) => setGoal(e.target.value as typeof goal)}
               options={[
                 { value: 'fat-loss', label: 'Fat Loss (Caloric Deficit)' },
                 { value: 'maintenance', label: 'Maintenance (Stay Same Weight)' },

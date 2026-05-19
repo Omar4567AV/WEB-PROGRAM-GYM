@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { photoService } from '../../services/photoService';
 import { ProgressPhoto } from '../../types/progress.types';
@@ -14,20 +14,17 @@ export const PhotosPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
 
-  useEffect(() => {
-    if (user?.id) {
-      loadPhotos();
-    }
+  const loadPhotos = useCallback(() => {
+    if (!user?.id) return;
+    setIsLoading(true);
+    photoService.getPhotosByClientId(user.id)
+      .then(setPhotos)
+      .finally(() => setIsLoading(false));
   }, [user?.id]);
 
-  const loadPhotos = () => {
-    if (user?.id) {
-      setIsLoading(true);
-      photoService.getPhotosByClientId(user.id)
-        .then(setPhotos)
-        .finally(() => setIsLoading(false));
-    }
-  };
+  useEffect(() => {
+    loadPhotos();
+  }, [loadPhotos]);
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this photo?')) {
@@ -35,7 +32,7 @@ export const PhotosPage: React.FC = () => {
         await photoService.deletePhoto(id);
         setPhotos(photos.filter(p => p.id !== id));
         toast.success('Photo deleted successfully');
-      } catch (error) {
+      } catch {
         toast.error('Failed to delete photo');
       }
     }

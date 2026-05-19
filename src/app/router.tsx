@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 
 // Layouts
 import AuthLayout from '../components/layout/AuthLayout';
@@ -27,7 +27,6 @@ import CoachClientDetails from '../features/coach/CoachClientDetails';
 import ProgramEditor from '../features/workout/ProgramEditor';
 
 // Other Features
-import CaloriesCalculator from '../features/calories/CaloriesCalculator';
 import NutritionPage from '../features/nutrition/NutritionPage';
 import NutritionPlanPage from '../features/nutrition/NutritionPlanPage';
 import WorkoutProgram from '../features/workout/WorkoutProgram';

@@ -11,7 +11,7 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = (location.state as any)?.from?.pathname || '/';
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +25,7 @@ export const LoginPage: React.FC = () => {
         // Just go to their specific dashboard
         navigate(loggedInUser.role === 'coach' ? '/coach' : '/client', { replace: true });
       }
-    } catch (error) {
+    } catch {
       // Error is handled by the auth context toast
     }
   };

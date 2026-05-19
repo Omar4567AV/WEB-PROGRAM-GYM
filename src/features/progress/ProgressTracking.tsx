@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { progressService } from '../../services/progressService';
 import { WeeklyEntry } from '../../types/progress.types';
+import { ClientProfile } from '../../types/user.types';
 import { Spinner, Button } from '../../components/ui';
 import { 
   TrendingDown, Calendar, Plus, Scale, Target, Activity, Flame, 
@@ -16,14 +17,17 @@ export const ProgressTracking: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isCheckInOpen, setIsCheckInOpen] = useState(false);
 
-  useEffect(() => {
-    if (user?.id) {
-      setIsLoading(true);
-      progressService.getProgressByClientId(user.id)
-        .then(setEntries)
-        .finally(() => setIsLoading(false));
-    }
+  const loadProgress = useCallback(() => {
+    if (!user?.id) return;
+    setIsLoading(true);
+    progressService.getProgressByClientId(user.id)
+      .then(setEntries)
+      .finally(() => setIsLoading(false));
   }, [user?.id]);
+
+  useEffect(() => {
+    loadProgress();
+  }, [loadProgress]);
 
   const getWeeklyChange = () => {
     if (entries.length < 2) return { text: '--', color: 'text-gray-400', isUp: false };
@@ -38,7 +42,7 @@ export const ProgressTracking: React.FC = () => {
     let isGood = false;
     
     if (user && 'goal' in user) {
-      const goal = (user as any).goal;
+      const goal = (user as ClientProfile).goal;
       if (goal === 'fat-loss' && isLoss) isGood = true;
       if (goal === 'muscle-gain' && isGain) isGood = true;
     }
@@ -176,7 +180,7 @@ export const ProgressTracking: React.FC = () => {
               {entries.length > 0 ? formatWeight(entries[0].measurements.weight) : '--'}
             </h3>
             <span className="text-xs text-gray-500 flex items-center gap-1 font-medium">
-              Initial: {user && 'weight' in user ? formatWeight((user as any).weight) : '--'}
+              Initial: {user && 'weight' in user ? formatWeight((user as ClientProfile).weight) : '--'}
             </span>
           </div>
           <div className="bg-red-50 text-[var(--primary)] p-3.5 rounded-2xl">
@@ -205,7 +209,7 @@ export const ProgressTracking: React.FC = () => {
           <div className="space-y-1.5">
             <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Fitness Goal</span>
             <h3 className="text-2xl font-black text-gray-900 capitalize">
-              {user && 'goal' in user ? (user as any).goal.replace('-', ' ') : 'Not Set'}
+              {user && 'goal' in user ? (user as ClientProfile).goal.replace('-', ' ') : 'Not Set'}
             </h3>
             <span className="text-xs text-emerald-500 flex items-center gap-1 font-semibold">
               <ShieldCheck className="w-4 h-4" /> Goal Plan Active

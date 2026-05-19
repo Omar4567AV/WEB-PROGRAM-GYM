@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { chatService } from '../../services/chatService';
 import { Message, ChatContact } from '../../types/chat.types';
@@ -11,7 +11,6 @@ import { formatDate } from '../../utils/formatters';
 export const MessagesPage: React.FC = () => {
   const { user } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
   
   // Check if a client id was passed to start chatting directly
   const targetContactId = location.state?.contactId;
@@ -26,16 +25,17 @@ export const MessagesPage: React.FC = () => {
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const hasAutoSelected = useRef(false);
 
   // Load Contacts
   useEffect(() => {
     if (!user) return;
-    
+
     const loadContacts = async () => {
       try {
         const loaded = await chatService.getContactsForUser(user.id, user.role);
         setContacts(loaded);
-        
+
         // If targetContactId was passed (e.g., from client details "Message" click), select it
         if (targetContactId) {
           const contact = loaded.find(c => c.id === targetContactId);
@@ -43,9 +43,10 @@ export const MessagesPage: React.FC = () => {
             setSelectedContact(contact);
             setIsMobileChatOpen(true);
           }
-        } else if (loaded.length > 0 && !selectedContact && window.innerWidth >= 1024) {
-          // Auto-select first contact on desktop
+        } else if (loaded.length > 0 && !hasAutoSelected.current && window.innerWidth >= 1024) {
+          // Auto-select first contact on desktop (only once)
           setSelectedContact(loaded[0]);
+          hasAutoSelected.current = true;
         }
       } catch (err) {
         console.error('Failed to load contacts', err);
@@ -56,7 +57,7 @@ export const MessagesPage: React.FC = () => {
 
     loadContacts();
 
-    // Poll contacts and messages every 4 seconds for pseudo-realtime updates
+    // Poll contacts every 4 seconds for pseudo-realtime updates
     const interval = setInterval(loadContacts, 4000);
     return () => clearInterval(interval);
   }, [user, targetContactId]);
@@ -66,17 +67,19 @@ export const MessagesPage: React.FC = () => {
     if (!user || !selectedContact) return;
 
     const loadMessages = async () => {
+      setIsLoadingMessages(true);
       try {
         const history = await chatService.getChatHistory(user.id, selectedContact.id);
         setMessages(history);
         await chatService.markAsRead(user.id, selectedContact.id);
       } catch (err) {
         console.error('Failed to load chat history', err);
+      } finally {
+        setIsLoadingMessages(false);
       }
     };
 
-    setIsLoadingMessages(true);
-    loadMessages().finally(() => setIsLoadingMessages(false));
+    loadMessages();
 
     const interval = setInterval(loadMessages, 3000);
     return () => clearInterval(interval);
@@ -265,7 +268,7 @@ export const MessagesPage: React.FC = () => {
                   <p className="max-w-xs text-sm">Send a message to start chatting with {selectedContact.name}.</p>
                 </div>
               ) : (
-                messages.map((msg, index) => {
+                messages.map((msg) => {
                   const isOwnMessage = msg.senderId === user.id;
                   
                   return (

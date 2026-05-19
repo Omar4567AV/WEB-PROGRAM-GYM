@@ -80,7 +80,7 @@ export const CheckoutPage: React.FC = () => {
       setTimeout(() => {
         navigate('/client');
       }, 2000);
-    } catch (err: any) {
+    } catch {
       setError('Payment gateway error. Please check your credentials or try again.');
       updateUserSubscription('failed');
     } finally {

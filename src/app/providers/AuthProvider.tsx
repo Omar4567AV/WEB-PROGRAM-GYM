@@ -1,55 +1,15 @@
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { User, UserRole } from '../../types/user.types';
+import React, { useState, ReactNode } from 'react';
+import { User } from '../../types/user.types';
 import { authService } from '../../services/authService';
 import { toast } from 'react-hot-toast';
-
-/**
- * Interface for the Auth Context value
- */
-interface AuthContextType {
-  user: User | null;
-  role: UserRole | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  login: (email: string, password: string) => Promise<User>;
-  registerClient: (userData: {
-    name: string;
-    email: string;
-    password: string;
-    phone: string;
-    age: number;
-    gender: 'male' | 'female';
-    goal: 'fat-loss' | 'maintenance' | 'muscle-gain';
-    weight: number;
-    height: number;
-    preferredLanguage: 'en' | 'ar';
-  }) => Promise<User>;
-  logout: () => void;
-  updateUserSubscription: (status: 'active' | 'failed') => void;
-  /** Sync the in-memory user and the auth session localStorage entry with a partial update */
-  updateCurrentUser: (partial: Partial<User>) => void;
-}
-
-/**
- * Create the context with a default undefined value
- */
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext, AuthContextType } from './AuthContext';
 
 /**
  * Provider component that wraps the app and provides auth state
  */
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  // Initialize auth state from local storage on mount
-  useEffect(() => {
-    const storedUser = authService.getCurrentUser();
-    if (storedUser) {
-      setUser(storedUser);
-    }
-    setIsLoading(false);
-  }, []);
+  const [user, setUser] = useState<User | null>(() => authService.getCurrentUser());
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const login = async (email: string, password: string): Promise<User> => {
     try {
@@ -57,22 +17,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const { user: loggedInUser } = await authService.login(email, password);
       setUser(loggedInUser);
       return loggedInUser;
-    } catch (error: any) {
-      toast.error(error.message || 'Login failed');
+    } catch (error: unknown) {
+      toast.error((error as Error).message || 'Login failed');
       throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const registerClient = async (userData: any): Promise<User> => {
+  const registerClient = async (userData: Parameters<AuthContextType['registerClient']>[0]): Promise<User> => {
     try {
       setIsLoading(true);
       const { user: registeredUser } = await authService.registerClient(userData);
       setUser(registeredUser);
       return registeredUser;
-    } catch (error: any) {
-      toast.error(error.message || 'Registration failed');
+    } catch (error: unknown) {
+      toast.error((error as Error).message || 'Registration failed');
       throw error;
     } finally {
       setIsLoading(false);
@@ -101,7 +61,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const existingClients = localStorage.getItem(key);
       if (existingClients) {
         const clientsList = JSON.parse(existingClients);
-        const idx = clientsList.findIndex((c: any) => c.id === user.id);
+        const idx = clientsList.findIndex((c: { id: string }) => c.id === user.id);
         if (idx !== -1) {
           clientsList[idx].subscriptionStatus = status;
           clientsList[idx].status = status === 'active' ? 'active' : 'pending';

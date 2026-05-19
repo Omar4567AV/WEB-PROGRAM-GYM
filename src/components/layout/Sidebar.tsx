@@ -89,7 +89,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 }
               `}
             >
-              {React.cloneElement(link.icon as React.ReactElement<any>, {
+              {React.cloneElement(link.icon as React.ReactElement<{ className?: string }>, {
                 className: 'w-5 h-5',
               })}
               {link.label}

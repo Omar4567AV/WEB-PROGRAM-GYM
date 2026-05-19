@@ -86,7 +86,7 @@ export const NutritionPlanPage: React.FC = () => {
         targetProtein:  generated.targetProtein,
         targetCarbs:    generated.targetCarbs,
         targetFats:     generated.targetFats,
-      } as any);
+      } as Partial<ClientProfile>);
 
       setPlan({
         calories: generated.targetCalories,

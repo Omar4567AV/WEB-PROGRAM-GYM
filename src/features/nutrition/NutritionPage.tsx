@@ -180,7 +180,7 @@ export const NutritionPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [user?.id, date]);
+  }, [user, date]);
 
   useEffect(() => { loadMeals(); }, [loadMeals]);
 

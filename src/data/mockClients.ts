@@ -5,7 +5,7 @@ import { mockClients as usersWithPasswords } from './mockUsers';
  * Clean client profiles without password fields for data display
  */
 export const mockClients: ClientProfile[] = usersWithPasswords.map(
-  ({ password, ...client }) => client as ClientProfile
+  ({ password: _password, ...client }) => client as ClientProfile
 );
 
 /**

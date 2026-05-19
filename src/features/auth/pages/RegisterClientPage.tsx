@@ -79,8 +79,8 @@ export const RegisterClientPage: React.FC = () => {
       });
       // Redirect to the checkout subscription plan page
       navigate('/checkout');
-    } catch (err: any) {
-      setError(err.message || 'Registration failed. Please try again.');
+    } catch (err: unknown) {
+      setError((err as Error).message || 'Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
